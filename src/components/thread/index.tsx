@@ -593,8 +593,9 @@ export function Thread() {
                     width={32}
                     height={32}
                   /> */}
-                  <span className="text-xl font-semibold tracking-tight">
-                    EchOS Chat
+                  <span className="text-xl font-semibold tracking-tight flex items-center gap-2">
+                    <img src="/iattraxia_logo.jpg" alt="IAX Logo" className="h-10 w-10 inline-block align-middle" />
+                    IAX Legal Agent
                   </span>
                 </motion.button>
               </div>
@@ -669,8 +670,9 @@ export function Thread() {
                 <div className="sticky bottom-0 flex flex-col items-center gap-8 bg-white">
                   {!chatStarted && (
                     <div className="flex items-center gap-3">
-                      <h1 className="text-2xl font-semibold tracking-tight">
-                        EchOS Chat
+                      <h1 className="text-2xl font-semibold tracking-tight flex items-center gap-2">
+                        <img src="/iattraxia_logo.jpg" alt="IAX Logo" className="h-12 w-12 inline-block align-middle" />
+                        IAX Legal Agent
                       </h1>
                     </div>
                   )}

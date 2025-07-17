@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "EchOS Chat",
+  title: "IAX Legal Agent",
   description: "Agent Chat UX by LangChain",
 };
 
@@ -22,6 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/iattraxia_logo.jpg" type="image/jpeg" />
+      </head>
       <body className={inter.className}>
         <NuqsAdapter>{children}</NuqsAdapter>
       </body>

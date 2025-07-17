@@ -15,11 +15,11 @@ import { useQueryState, parseAsBoolean } from "nuqs";
 import { GenericInterruptView } from "./generic-interrupt";
 import { useArtifact } from "../artifact";
 import * as Accordion from "@radix-ui/react-accordion";
-import '@/styles/accordion.css'; // 可选，样式部分
+import '@/styles/accordion.css';
 import { ChevronDownIcon } from "lucide-react";
 import React, { useMemo, useState, useEffect } from "react";
 
-// ===== DEBUGGING SIMPLE PARA BURBUJAS =====
+// ===== DEBUGGING AVANZADO PARA BURBUJAS =====
 const bubbleDebug = {
   log: (msg: string, data?: any) => console.log(`🧠 [BUBBLE] ${msg}`, data || ''),
   error: (msg: string, data?: any) => console.error(`💥 [BUBBLE] ${msg}`, data || ''),
@@ -32,270 +32,962 @@ const bubbleDebug = {
   }
 };
 
-// ===== SISTEMA DE PERSISTENCIA DE BURBUJAS DURANTE STREAMING =====
+// ===== SISTEMA ACUMULATIVO DE BURBUJAS =====
 interface BubbleState {
-  type: 'logic' | 'steps' | 'reasoning';
+  type: 'logic' | 'steps' | 'reasoning' | 'analysis' | 'sources' | 'analyze_query' | 'research_plan' | 'conduct_research' | 'respond';
   data: any;
   timestamp: number;
   messageId: string;
+  title: string;
+  color: string;
 }
 
-// Colección global para mantener TODAS las burbujas activas de la conversación
-const activeBubbles = new Map<string, BubbleState>();
-let conversationStartTime = Date.now();
+// Colección PERMANENTE de burbujas - NUNCA se limpia automáticamente
+const permanentBubbles = new Map<string, BubbleState>();
+let globalBubbleCounter = 0;
 
-// Función para limpiar burbujas antiguas (más de 30 segundos)
-function cleanupOldBubbles() {
+// ===== SISTEMA DE OPTIMIZACIÓN DE RENDIMIENTO =====
+const processedMessages = new Map<string, { hash: string, lastProcessed: number }>();
+const NON_JSON_CACHE = new Set<string>();
+const PROCESSING_COOLDOWN = 100; // 100ms entre procesamiento del mismo mensaje
+
+// Función para crear hash del contenido del mensaje
+function createContentHash(content: string): string {
+  return content.substring(0, 50) + content.length + (content.includes('{') ? 'json' : 'text');
+}
+
+// Función para verificar si debemos procesar el mensaje
+function shouldProcessMessage(messageId: string, content: string): boolean {
+  const contentHash = createContentHash(content);
   const now = Date.now();
-  for (const [id, bubble] of activeBubbles.entries()) {
-    if (now - bubble.timestamp > 30000) {
-      activeBubbles.delete(id);
-      bubbleDebug.track('CLEANED_OLD_BUBBLE', id, { age: now - bubble.timestamp });
+  
+  // Verificar si ya procesamos este contenido recientemente
+  const previousProcessing = processedMessages.get(messageId);
+  if (previousProcessing) {
+    if (previousProcessing.hash === contentHash && 
+        (now - previousProcessing.lastProcessed) < PROCESSING_COOLDOWN) {
+      return false; // Skip procesamiento repetitivo
     }
   }
-}
-
-// Función para detectar y crear burbujas proactivamente desde JSON incompleto
-function detectAndCreateIncompleteJSONBubble(content: string, messageId: string): BubbleState | null {
-  const trimmed = content.trim();
   
-  console.log("🔍 DETECTING INCOMPLETE JSON:");
-  console.log("MessageId:", messageId);
-  console.log("Content length:", content.length);
-  console.log("Content preview:", content.substring(0, 100));
-  
-  // Verificar si ya existe una burbuja para este mensaje
-  const existingBubble = activeBubbles.get(messageId);
-  if (existingBubble) {
-    console.log("🔄 ACTUALIZANDO BURBUJA EXISTENTE:", existingBubble.type);
-  } else {
-    console.log("🆕 CREANDO NUEVA BURBUJA para:", messageId);
-  }
-  
-  // Intentar extraer campos completos de JSON incompleto
-  try {
-    // MEJORADA: Detectar campo logic completo - ahora maneja JSONs con campos adicionales
-    const logicMatch = trimmed.match(/"logic"\s*:\s*"([^"]*(?:\\.[^"]*)*)"/);
-    if (logicMatch) {
-      const logicContent = logicMatch[1];
-      console.log("✅ LOGIC DETECTED:", logicContent.substring(0, 50) + "...");
-      
-      // NUEVA LÓGICA: Actualizar contenido existente o crear nuevo
-      const bubbleState: BubbleState = {
-        type: 'logic',
-        data: { logic: logicContent },
-        timestamp: existingBubble ? existingBubble.timestamp : Date.now(), // Mantener timestamp original
-        messageId
-      };
-      
-      activeBubbles.set(messageId, bubbleState);
-      
-      if (existingBubble) {
-        bubbleDebug.track('BUBBLE_CONTENT_UPDATED', messageId, { 
-          type: 'logic',
-          contentLength: content.length,
-          newLogic: logicContent.substring(0, 50) + '...'
-        });
-      } else {
-        bubbleDebug.track('PROACTIVE_LOGIC_BUBBLE_CREATED', messageId, { 
-          contentLength: content.length,
-          extractedLogic: logicContent.substring(0, 50) + '...'
-        });
-      }
-      
-      return bubbleState;
-    }
-    
-    // MEJORADA: Detectar array de steps - mejorado para JSONs con campos adicionales
-    const stepsMatch = trimmed.match(/"steps"\s*:\s*\[(.*)/s);
-    if (stepsMatch) {
-      console.log("✅ STEPS DETECTED:", stepsMatch[1].substring(0, 50) + "...");
-      
-      // Intentar parsear los steps que tengamos hasta ahora
-      let stepsContent = ['Preparando pasos de investigación...'];
-      try {
-        // Intentar extraer steps individuales con regex
-        const stepMatches = stepsMatch[1].match(/"([^"]*(?:\\.[^"]*)*)"/g);
-        if (stepMatches && stepMatches.length > 0) {
-          stepsContent = stepMatches.map(step => step.slice(1, -1)); // Remover comillas
-        }
-      } catch (e) {
-        // Si falla, usar contenido por defecto
-      }
-      
-      // NUEVA LÓGICA: Actualizar contenido existente o crear nuevo
-      const bubbleState: BubbleState = {
-        type: 'steps',
-        data: { steps: stepsContent },
-        timestamp: existingBubble ? existingBubble.timestamp : Date.now(),
-        messageId
-      };
-      
-      activeBubbles.set(messageId, bubbleState);
-      
-      if (existingBubble) {
-        bubbleDebug.track('BUBBLE_CONTENT_UPDATED', messageId, { 
-          type: 'steps',
-          contentLength: content.length,
-          stepsCount: stepsContent.length
-        });
-      } else {
-        bubbleDebug.track('PROACTIVE_STEPS_BUBBLE_CREATED', messageId, { 
-          contentLength: content.length,
-          stepsCount: stepsContent.length
-        });
-      }
-      
-      return bubbleState;
-    }
-    
-    // MEJORADA: Detectar campo reasoning completo
-    const reasoningMatch = trimmed.match(/"reasoning"\s*:\s*"([^"]*(?:\\.[^"]*)*)"/);
-    if (reasoningMatch) {
-      const reasoningContent = reasoningMatch[1];
-      console.log("✅ REASONING DETECTED:", reasoningContent.substring(0, 50) + "...");
-      
-      // NUEVA LÓGICA: Actualizar contenido existente o crear nuevo
-      const bubbleState: BubbleState = {
-        type: 'reasoning',
-        data: { reasoning: reasoningContent },
-        timestamp: existingBubble ? existingBubble.timestamp : Date.now(),
-        messageId
-      };
-      
-      activeBubbles.set(messageId, bubbleState);
-      
-      if (existingBubble) {
-        bubbleDebug.track('BUBBLE_CONTENT_UPDATED', messageId, { 
-          type: 'reasoning',
-          contentLength: content.length,
-          newReasoning: reasoningContent.substring(0, 50) + '...'
-        });
-      } else {
-        bubbleDebug.track('PROACTIVE_REASONING_BUBBLE_CREATED', messageId, { 
-          contentLength: content.length,
-          extractedReasoning: reasoningContent.substring(0, 50) + '...'
-        });
-      }
-      
-      return bubbleState;
-    }
-    
-  } catch (e) {
-    bubbleDebug.error('Error extracting from incomplete JSON', e);
-  }
-  
-  console.log("❌ NO PATTERN MATCHED for messageId:", messageId);
-  console.log("Available patterns tested:");
-  console.log("- Logic pattern: /\"logic\"\\s*:\\s*\"([^\"]*(?:\\\\.[^\"]*)*)\"/");
-  console.log("- Steps pattern: /\"steps\"\\s*:\\s*\\[(.*)/");
-  console.log("- Reasoning pattern: /\"reasoning\"\\s*:\\s*\"([^\"]*(?:\\\\.[^\"]*)*)\"/");
-  
-  // Fallback: detectar solo el inicio del JSON como antes
-  if (trimmed.match(/\{".*"logic":\s*"/)) {
-    console.log("🔄 FALLBACK: Logic pattern start detected");
-    const bubbleState: BubbleState = {
-      type: 'logic',
-      data: { logic: 'Analizando la consulta...' },
-      timestamp: existingBubble ? existingBubble.timestamp : Date.now(),
-      messageId
-    };
-    activeBubbles.set(messageId, bubbleState);
-    bubbleDebug.track('PROACTIVE_LOGIC_BUBBLE_CREATED_FALLBACK', messageId, { contentLength: content.length });
-    return bubbleState;
-  }
-  
-  if (trimmed.match(/\{".*"steps":\s*\[/)) {
-    console.log("🔄 FALLBACK: Steps pattern start detected");
-    const bubbleState: BubbleState = {
-      type: 'steps',
-      data: { steps: ['Preparando pasos de investigación...'] },
-      timestamp: existingBubble ? existingBubble.timestamp : Date.now(),
-      messageId
-    };
-    activeBubbles.set(messageId, bubbleState);
-    bubbleDebug.track('PROACTIVE_STEPS_BUBBLE_CREATED_FALLBACK', messageId, { contentLength: content.length });
-    return bubbleState;
-  }
-  
-  if (trimmed.match(/\{".*"reasoning":\s*"/)) {
-    console.log("🔄 FALLBACK: Reasoning pattern start detected");
-    const bubbleState: BubbleState = {
-      type: 'reasoning',
-      data: { reasoning: 'Procesando razonamiento...' },
-      timestamp: existingBubble ? existingBubble.timestamp : Date.now(),
-      messageId
-    };
-    activeBubbles.set(messageId, bubbleState);
-    bubbleDebug.track('PROACTIVE_REASONING_BUBBLE_CREATED_FALLBACK', messageId, { contentLength: content.length });
-    return bubbleState;
-  }
-  
-  console.log("❌ NO FALLBACK PATTERNS MATCHED");
-  return null;
-}
-
-// Función para detectar si el contenido parece JSON incompleto
-function isIncompleteJSON(content: string): boolean {
-  const trimmed = content.trim();
-  
-  console.log("🔍 isIncompleteJSON - Analizando:");
-  console.log("  Longitud:", trimmed.length);
-  console.log("  Empieza con '{':", trimmed.startsWith('{'));
-  console.log("  Empieza con '[':", trimmed.startsWith('['));
-  console.log("  Preview:", trimmed.substring(0, 50));
-  
-  if (!trimmed.startsWith('{') && !trimmed.startsWith('[')) {
-    console.log("❌ isIncompleteJSON: No empieza con { o [");
+  // Verificar si es contenido que sabemos que no es JSON
+  if (NON_JSON_CACHE.has(contentHash)) {
     return false;
   }
   
-  // Contar llaves y corchetes
-  const openBraces = (trimmed.match(/{/g) || []).length;
-  const closeBraces = (trimmed.match(/}/g) || []).length;
-  const openBrackets = (trimmed.match(/\[/g) || []).length;
-  const closeBrackets = (trimmed.match(/\]/g) || []).length;
+  // Si el contenido es muy largo y no tiene estructura JSON, probablemente no es JSON
+  const trimmed = content.trim();
+  if (trimmed.length > 1000 && 
+      !trimmed.includes('{') && 
+      !trimmed.includes('"type":') && 
+      !trimmed.includes('"logic":') && 
+      !trimmed.includes('"steps":')) {
+    NON_JSON_CACHE.add(contentHash);
+    return false;
+  }
   
-  console.log("🔍 Conteo de llaves/corchetes:");
-  console.log("  Llaves abiertas:", openBraces);
-  console.log("  Llaves cerradas:", closeBraces);
-  console.log("  Corchetes abiertos:", openBrackets);
-  console.log("  Corchetes cerrados:", closeBrackets);
-  
-  const isIncomplete = openBraces !== closeBraces || openBrackets !== closeBrackets;
-  console.log("🔍 isIncompleteJSON resultado:", isIncomplete);
-  
-  return isIncomplete;
+  // Actualizar registro de procesamiento
+  processedMessages.set(messageId, { hash: contentHash, lastProcessed: now });
+  return true;
 }
 
-// Función para renderizar todas las burbujas activas
-function renderActiveBubbles(): React.ReactElement[] {
-  cleanupOldBubbles();
-  const bubbles = Array.from(activeBubbles.values())
+// ===== FUNCIONES DE DETECCIÓN MEJORADAS =====
+
+// Detectar actualizaciones de LangGraph backend
+function detectLangGraphUpdate(content: string, messageId: string): BubbleState | null {
+  // Primero intentar detectar el patrón completo (para logs)
+  const langGraphMatch = content.match(/LangGraph backend full update:\s*(\{.*\})/s);
+  let jsonContent = null;
+  
+  if (langGraphMatch) {
+    try {
+      jsonContent = JSON.parse(langGraphMatch[1]);
+      console.log("🏗️ LANGGRAPH UPDATE DETECTED (con patrón):", jsonContent);
+    } catch (e) {
+      console.log("❌ Error parsing LangGraph JSON (con patrón):", e);
+    }
+  } else {
+    // Si no hay patrón, intentar parsear directamente como JSON solo si parece JSON
+    const trimmed = content.trim();
+    
+    // Evitar intentar parsear contenido que claramente no es JSON
+    if (!trimmed.startsWith('{') && !trimmed.startsWith('[')) {
+      return null;
+    }
+    
+    // Si es demasiado largo y no tiene estructura LangGraph, probablemente es texto normal
+    if (trimmed.length > 1000 && !trimmed.includes('analyze_and_route_query') && !trimmed.includes('create_research_plan') && !trimmed.includes('conduct_research') && !trimmed.includes('respond')) {
+      return null;
+    }
+    
+    try {
+      const parsed = JSON.parse(trimmed);
+      console.log("🔍 INTENTANDO DETECTAR JSON DIRECTO:", parsed);
+      
+      // Verificar si es una actualización de LangGraph
+      if (parsed.analyze_and_route_query || parsed.create_research_plan || parsed.conduct_research || parsed.respond) {
+        jsonContent = parsed;
+        console.log("🏗️ LANGGRAPH UPDATE DETECTED (JSON directo):", jsonContent);
+      }
+    } catch (e) {
+      // No es JSON válido, continuar silenciosamente
+      return null;
+    }
+  }
+  
+  if (!jsonContent) return null;
+  
+  try {
+    // Detectar tipo específico de update
+    if (jsonContent.analyze_and_route_query) {
+      return {
+        type: 'analyze_query',
+        data: jsonContent.analyze_and_route_query,
+        timestamp: Date.now(),
+        messageId: `langgraph-analyze-${globalBubbleCounter++}`,
+        title: "🎯 Analizando Consulta",
+        color: "yellow"
+      };
+    }
+    
+    if (jsonContent.create_research_plan) {
+      return {
+        type: 'research_plan',
+        data: jsonContent.create_research_plan,
+        timestamp: Date.now(),
+        messageId: `langgraph-plan-${globalBubbleCounter++}`,
+        title: "📋 Creando Plan de Investigación",
+        color: "green"
+      };
+    }
+    
+    if (jsonContent.conduct_research) {
+      return {
+        type: 'conduct_research',
+        data: jsonContent.conduct_research,
+        timestamp: Date.now(),
+        messageId: `langgraph-research-${globalBubbleCounter++}`,
+        title: "🔍 Investigando Documentos",
+        color: "blue"
+      };
+    }
+    
+    if (jsonContent.respond) {
+      return {
+        type: 'respond',
+        data: jsonContent.respond,
+        timestamp: Date.now(),
+        messageId: `langgraph-respond-${globalBubbleCounter++}`,
+        title: "✍️ Preparando Respuesta",
+        color: "purple"
+      };
+    }
+  } catch (e) {
+    console.log("❌ Error procesando actualización LangGraph:", e);
+  }
+  
+  return null;
+}
+
+// Detectar JSON streaming con regex mejoradas y optimización
+function detectStreamingJSON(content: string, messageId: string): BubbleState | null {
+  // ===== FILTROS DE OPTIMIZACIÓN =====
+  const contentHash = content.substring(0, 50) + content.length;
+  const now = Date.now();
+  
+  // Skip procesamiento repetitivo del mismo contenido
+  const previousProcessing = processedMessages.get(messageId);
+  if (previousProcessing && 
+      previousProcessing.hash === contentHash && 
+      (now - previousProcessing.lastProcessed) < 100) {
+    return null; // Skip procesamiento repetitivo
+  }
+  
+  // Skip contenido que sabemos que no es JSON
+  if (NON_JSON_CACHE.has(contentHash)) {
+    return null;
+  }
+  
+  // Si el contenido es muy largo y claramente no es JSON, cachearlo y salir
+  const trimmed = content.trim();
+  if (trimmed.length > 1000 && 
+      !trimmed.includes('{') && 
+      !trimmed.includes('"type":') && 
+      !trimmed.includes('"logic":')) {
+    NON_JSON_CACHE.add(contentHash);
+    return null;
+  }
+  
+  // Solo hacer log si es contenido potencialmente JSON
+  if (content.includes('{') || content.includes('"')) {
+    console.log("🔍 DETECTING STREAMING JSON:");
+    console.log("MessageId:", messageId);
+    console.log("Content:", content.substring(0, 200));
+  }
+  
+  // Actualizar registro de procesamiento
+  processedMessages.set(messageId, { hash: contentHash, lastProcessed: now });
+  
+  // Desescapar contenido
+  const unescaped = content.replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+  
+  // NUEVA REGEX MEJORADA: Detectar campos específicos sin requerir comillas de cierre
+  
+  // 1. Detectar logic (con o sin type)
+  const logicMatch = unescaped.match(/\{\s*(?:"[^"]+"\s*:\s*[^,}]+,\s*)*"logic"\s*:\s*"([^"]*)/);
+  if (logicMatch) {
+    console.log("✅ LOGIC DETECTED:", logicMatch[1]);
+    return {
+      type: 'logic',
+      data: { logic: logicMatch[1] },
+      timestamp: Date.now(),
+      messageId: `stream-logic-${messageId}`,
+      title: "🧠 Razonamiento",
+      color: "yellow"
+    };
+  }
+  
+  // 1b. Detectar tipo legal (específico para consultas jurídicas)
+  const legalMatch = unescaped.match(/\{\s*"type"\s*:\s*"legal"(?:\s*,\s*"logic"\s*:\s*"([^"]*)")?/);
+  if (legalMatch) {
+    console.log("✅ LEGAL TYPE DETECTED:", legalMatch[1] || "Análisis jurídico");
+    return {
+      type: 'legal',
+      data: { type: 'legal', logic: legalMatch[1] || 'Análisis jurídico iniciado' },
+      timestamp: Date.now(),
+      messageId: `stream-legal-${messageId}`,
+      title: "⚖️ Análisis Jurídico",
+      color: "indigo"
+    };
+  }
+  
+  // 2. Detectar steps array 
+  const stepsMatch = unescaped.match(/\{\s*(?:"[^"]+"\s*:\s*[^,}]+,\s*)*"steps"\s*:\s*\[(.*)/s);
+  if (stepsMatch) {
+    console.log("✅ STEPS DETECTED:", stepsMatch[1]);
+    // Extraer pasos individuales
+    const stepPattern = /"([^"]+)"/g;
+    const steps = [];
+    let stepMatch;
+    while ((stepMatch = stepPattern.exec(stepsMatch[1])) !== null) {
+      steps.push(stepMatch[1]);
+    }
+    
+    return {
+      type: 'steps',
+      data: { steps: steps.length > 0 ? steps : ['Preparando pasos...'] },
+      timestamp: Date.now(),
+      messageId: `stream-steps-${messageId}`,
+      title: `📋 Pasos de Investigación (${steps.length})`,
+      color: "green"
+    };
+  }
+  
+  // 3. Detectar reasoning
+  const reasoningMatch = unescaped.match(/\{\s*(?:"[^"]+"\s*:\s*[^,}]+,\s*)*"reasoning"\s*:\s*"([^"]*)/);
+  if (reasoningMatch) {
+    console.log("✅ REASONING DETECTED:", reasoningMatch[1]);
+    return {
+      type: 'reasoning',
+      data: { reasoning: reasoningMatch[1] },
+      timestamp: Date.now(),
+      messageId: `stream-reasoning-${messageId}`,
+      title: "🔍 Análisis Detallado",
+      color: "purple"
+    };
+  }
+  
+  // 4. Detectar analysis
+  const analysisMatch = unescaped.match(/\{\s*(?:"[^"]+"\s*:\s*[^,}]+,\s*)*"analysis"\s*:\s*"([^"]*)/);
+  if (analysisMatch) {
+    console.log("✅ ANALYSIS DETECTED:", analysisMatch[1]);
+    return {
+      type: 'analysis',
+      data: { analysis: analysisMatch[1] },
+      timestamp: Date.now(),
+      messageId: `stream-analysis-${messageId}`,
+      title: "📊 Análisis",
+      color: "blue"
+    };
+  }
+  
+  // 5. Detectar sources array
+  const sourcesMatch = unescaped.match(/\{\s*(?:"[^"]+"\s*:\s*[^,}]+,\s*)*"sources"\s*:\s*\[(.*)/s);
+  if (sourcesMatch) {
+    console.log("✅ SOURCES DETECTED:", sourcesMatch[1]);
+    const sourcePattern = /"([^"]+)"/g;
+    const sources = [];
+    let sourceMatch;
+    while ((sourceMatch = sourcePattern.exec(sourcesMatch[1])) !== null) {
+      sources.push(sourceMatch[1]);
+    }
+    
+    return {
+      type: 'sources',
+      data: { sources: sources.length > 0 ? sources : ['Buscando fuentes...'] },
+      timestamp: Date.now(),
+      messageId: `stream-sources-${messageId}`,
+      title: `📚 Fuentes Consultadas (${sources.length})`,
+      color: "orange"
+    };
+  }
+  
+  console.log("❌ NO STREAMING JSON PATTERN MATCHED");
+  return null;
+}
+
+// Detectar JSON completo válido
+function detectCompleteJSON(content: string, messageId: string): BubbleState | null {
+  // Evitar intentar parsear contenido que claramente no es JSON
+  const trimmed = content.trim();
+  
+  // Si no comienza con { o [, muy probablemente no es JSON
+  if (!trimmed.startsWith('{') && !trimmed.startsWith('[')) {
+    return null;
+  }
+  
+  // Si es demasiado largo y no tiene estructura JSON, probablemente es texto normal
+  if (trimmed.length > 1000 && !trimmed.includes('"type":') && !trimmed.includes('"logic":') && !trimmed.includes('"steps":')) {
+    return null;
+  }
+  
+  try {
+    const unescaped = trimmed.replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+    const parsed = JSON.parse(unescaped);
+    console.log("✅ COMPLETE JSON DETECTED:", parsed);
+    
+    if (parsed.logic) {
+      return {
+        type: 'logic',
+        data: parsed,
+        timestamp: Date.now(),
+        messageId: `complete-logic-${messageId}`,
+        title: "🧠 Razonamiento",
+        color: "yellow"
+      };
+    }
+    
+    // Detectar tipo legal completo
+    if (parsed.type === 'legal' && parsed.logic) {
+      return {
+        type: 'legal',
+        data: parsed,
+        timestamp: Date.now(),
+        messageId: `complete-legal-${messageId}`,
+        title: "⚖️ Análisis Jurídico",
+        color: "indigo"
+      };
+    }
+    
+    if (parsed.steps && Array.isArray(parsed.steps)) {
+      return {
+        type: 'steps',
+        data: parsed,
+        timestamp: Date.now(),
+        messageId: `complete-steps-${messageId}`,
+        title: `📋 Pasos de Investigación (${parsed.steps.length})`,
+        color: "green"
+      };
+    }
+    
+    if (parsed.reasoning) {
+      return {
+        type: 'reasoning',
+        data: parsed,
+        timestamp: Date.now(),
+        messageId: `complete-reasoning-${messageId}`,
+        title: "🔍 Análisis Detallado",
+        color: "purple"
+      };
+    }
+    
+    if (parsed.analysis) {
+      return {
+        type: 'analysis',
+        data: parsed,
+        timestamp: Date.now(),
+        messageId: `complete-analysis-${messageId}`,
+        title: "📊 Análisis",
+        color: "blue"
+      };
+    }
+    
+    if (parsed.sources && Array.isArray(parsed.sources)) {
+      return {
+        type: 'sources',
+        data: parsed,
+        timestamp: Date.now(),
+        messageId: `complete-sources-${messageId}`,
+        title: `📚 Fuentes Consultadas (${parsed.sources.length})`,
+        color: "orange"
+      };
+    }
+  } catch (e) {
+    // No es JSON válido, continuar
+  }
+  
+  return null;
+}
+
+// Función helper para generar la sección de debug
+function renderDebugSection(bubbleState: BubbleState) {
+  return (
+    <div className="border-t pt-3 space-y-2">
+      <div className="text-xs">
+        <span className="font-semibold text-gray-600">Message ID:</span>
+        <div className="font-mono text-gray-500 bg-gray-50 p-2 rounded mt-1 break-all">
+          {bubbleState.messageId}
+        </div>
+      </div>
+      
+      <div className="text-xs">
+        <span className="font-semibold text-gray-600">JSON Data:</span>
+        <pre className="font-mono text-gray-500 bg-gray-50 p-2 rounded mt-1 overflow-x-auto text-xs whitespace-pre-wrap">
+          {JSON.stringify(bubbleState.data, null, 2)}
+        </pre>
+      </div>
+    </div>
+  );
+}
+
+// ===== FUNCIONES DE RENDERIZADO ESPECÍFICAS =====
+
+function renderLogicBubble(bubbleState: BubbleState, key: string) {
+  const { logic, type } = bubbleState.data;
+  
+  return (
+    <Accordion.Root 
+      type="multiple" 
+      defaultValue={['logic-item']}
+      className="border border-yellow-200 rounded-lg mb-2"
+      key={key}
+    >
+      <Accordion.Item value="logic-item">
+        <Accordion.Header>
+          <Accordion.Trigger className="AccordionTrigger w-full flex items-center justify-between p-3 text-left hover:bg-yellow-50 transition-colors">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-1 rounded text-xs font-mono bg-yellow-100 text-yellow-800">
+                🧠 Razonamiento
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                {type || 'Análisis'}
+              </span>
+              <span className="text-xs text-gray-500">
+                {new Date(bubbleState.timestamp).toLocaleTimeString()}
+              </span>
+            </div>
+            <ChevronDownIcon className="AccordionChevron" aria-hidden />
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className="AccordionContent">
+          <div className="p-3 pt-0 space-y-3">
+            {/* Contenido principal */}
+            <div className="bg-yellow-50 p-3 rounded text-sm">
+              <MarkdownText>{logic}</MarkdownText>
+            </div>
+            
+            {/* Información de debug */}
+            {renderDebugSection(bubbleState)}
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}
+
+function renderLegalBubble(bubbleState: BubbleState, key: string) {
+  const { type, logic } = bubbleState.data;
+  
+  return (
+    <Accordion.Root 
+      type="multiple" 
+      defaultValue={['legal-item']}
+      className="border border-indigo-200 rounded-lg mb-2"
+      key={key}
+    >
+      <Accordion.Item value="legal-item">
+        <Accordion.Header>
+          <Accordion.Trigger className="AccordionTrigger w-full flex items-center justify-between p-3 text-left hover:bg-indigo-50 transition-colors">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-1 rounded text-xs font-mono bg-indigo-100 text-indigo-800">
+                ⚖️ Análisis Jurídico
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                {type}
+              </span>
+              <span className="text-xs text-gray-500">
+                {new Date(bubbleState.timestamp).toLocaleTimeString()}
+              </span>
+            </div>
+            <ChevronDownIcon className="AccordionChevron" aria-hidden />
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className="AccordionContent">
+          <div className="p-3 pt-0 space-y-3">
+            {/* Contenido principal */}
+            <div className="bg-indigo-50 p-3 rounded text-sm">
+              <MarkdownText>{logic}</MarkdownText>
+            </div>
+            
+            {/* Información de debug */}
+            {renderDebugSection(bubbleState)}
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}
+
+function renderStepsBubble(bubbleState: BubbleState, key: string) {
+  const { steps } = bubbleState.data;
+  
+  return (
+    <Accordion.Root 
+      type="multiple" 
+      defaultValue={['steps-item']}
+      className="border border-green-200 rounded-lg mb-2"
+      key={key}
+    >
+      <Accordion.Item value="steps-item">
+        <Accordion.Header>
+          <Accordion.Trigger className="AccordionTrigger w-full flex items-center justify-between p-3 text-left hover:bg-green-50 transition-colors">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-1 rounded text-xs font-mono bg-green-100 text-green-800">
+                📋 Pasos ({steps.length})
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                Plan de investigación
+              </span>
+              <span className="text-xs text-gray-500">
+                {new Date(bubbleState.timestamp).toLocaleTimeString()}
+              </span>
+            </div>
+            <ChevronDownIcon className="AccordionChevron" aria-hidden />
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className="AccordionContent">
+          <div className="p-3 pt-0 space-y-3">
+            {/* Contenido principal */}
+            <div className="bg-green-50 p-3 rounded text-sm">
+              <ol className="list-decimal list-inside space-y-2">
+                {steps.map((step: string, index: number) => (
+                  <li key={index} className="text-gray-700">
+                    <span className="font-medium">{index + 1}.</span> <MarkdownText>{step}</MarkdownText>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            
+            {/* Información de debug */}
+            {renderDebugSection(bubbleState)}
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}
+
+function renderReasoningBubble(bubbleState: BubbleState, key: string) {
+  const { reasoning } = bubbleState.data;
+  
+  return (
+    <Accordion.Root 
+      type="multiple" 
+      defaultValue={['reasoning-item']}
+      className="border border-purple-200 rounded-lg mb-2"
+      key={key}
+    >
+      <Accordion.Item value="reasoning-item">
+        <Accordion.Header>
+          <Accordion.Trigger className="AccordionTrigger w-full flex items-center justify-between p-3 text-left hover:bg-purple-50 transition-colors">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-1 rounded text-xs font-mono bg-purple-100 text-purple-800">
+                🔍 Análisis Detallado
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                Razonamiento profundo
+              </span>
+              <span className="text-xs text-gray-500">
+                {new Date(bubbleState.timestamp).toLocaleTimeString()}
+              </span>
+            </div>
+            <ChevronDownIcon className="AccordionChevron" aria-hidden />
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className="AccordionContent">
+          <div className="p-3 pt-0 space-y-3">
+            {/* Contenido principal */}
+            <div className="bg-purple-50 p-3 rounded text-sm">
+              <MarkdownText>{reasoning}</MarkdownText>
+            </div>
+            
+            {/* Información de debug */}
+            {renderDebugSection(bubbleState)}
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}
+
+function renderAnalysisBubble(bubbleState: BubbleState, key: string) {
+  const { analysis } = bubbleState.data;
+  
+  return (
+    <Accordion.Root 
+      type="multiple" 
+      defaultValue={['analysis-item']}
+      className="border border-blue-200 rounded-lg mb-2"
+      key={key}
+    >
+      <Accordion.Item value="analysis-item">
+        <Accordion.Header>
+          <Accordion.Trigger className="AccordionTrigger w-full flex items-center justify-between p-3 text-left hover:bg-blue-50 transition-colors">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-1 rounded text-xs font-mono bg-blue-100 text-blue-800">
+                📊 Análisis
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                Análisis de datos
+              </span>
+              <span className="text-xs text-gray-500">
+                {new Date(bubbleState.timestamp).toLocaleTimeString()}
+              </span>
+            </div>
+            <ChevronDownIcon className="AccordionChevron" aria-hidden />
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className="AccordionContent">
+          <div className="p-3 pt-0 space-y-3">
+            {/* Contenido principal */}
+            <div className="bg-blue-50 p-3 rounded text-sm">
+              <MarkdownText>{analysis}</MarkdownText>
+            </div>
+            
+            {/* Información de debug */}
+            {renderDebugSection(bubbleState)}
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}
+
+function renderSourcesBubble(bubbleState: BubbleState, key: string) {
+  const { sources } = bubbleState.data;
+  
+  return (
+    <Accordion.Root 
+      type="multiple" 
+      defaultValue={['sources-item']}
+      className="border border-orange-200 rounded-lg mb-2"
+      key={key}
+    >
+      <Accordion.Item value="sources-item">
+        <Accordion.Header>
+          <Accordion.Trigger className="AccordionTrigger w-full flex items-center justify-between p-3 text-left hover:bg-orange-50 transition-colors">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-1 rounded text-xs font-mono bg-orange-100 text-orange-800">
+                📚 Fuentes ({sources.length})
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                Referencias consultadas
+              </span>
+              <span className="text-xs text-gray-500">
+                {new Date(bubbleState.timestamp).toLocaleTimeString()}
+              </span>
+            </div>
+            <ChevronDownIcon className="AccordionChevron" aria-hidden />
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className="AccordionContent">
+          <div className="p-3 pt-0 space-y-3">
+            {/* Contenido principal */}
+            <div className="bg-orange-50 p-3 rounded text-sm">
+              <ul className="list-disc list-inside space-y-1">
+                {sources.map((source: string, index: number) => (
+                  <li key={index} className="text-gray-700">
+                    <MarkdownText>{source}</MarkdownText>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            {/* Información de debug */}
+            {renderDebugSection(bubbleState)}
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}
+
+function renderAnalyzeQueryBubble(bubbleState: BubbleState, key: string) {
+  const { router } = bubbleState.data;
+  
+  return (
+    <Accordion.Root 
+      type="multiple" 
+      defaultValue={['analyze-item']}
+      className="border border-yellow-300 rounded-lg mb-2 bg-yellow-25"
+      key={key}
+    >
+      <Accordion.Item value="analyze-item">
+        <Accordion.Header>
+          <Accordion.Trigger className="AccordionTrigger w-full flex items-center justify-between p-3 text-left hover:bg-yellow-75 transition-colors">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-1 rounded text-xs font-mono bg-yellow-200 text-yellow-900">
+                🎯 Analizando Consulta
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                Tipo: {router.type || 'general'}
+              </span>
+              <span className="text-xs text-gray-500">
+                {new Date(bubbleState.timestamp).toLocaleTimeString()}
+              </span>
+            </div>
+            <ChevronDownIcon className="AccordionChevron" aria-hidden />
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className="AccordionContent">
+          <div className="p-3 pt-0">
+            <div className="bg-yellow-75 p-3 rounded text-sm">
+              <div className="space-y-2">
+                <div><strong>Tipo de consulta:</strong> {router.type || 'No especificado'}</div>
+                {router.logic && (
+                  <div>
+                    <strong>Lógica de análisis:</strong>
+                    <div className="mt-1 p-2 bg-white/50 rounded"><MarkdownText>{router.logic}</MarkdownText></div>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Información de debug */}
+            {renderDebugSection(bubbleState)}
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}
+
+function renderResearchPlanBubble(bubbleState: BubbleState, key: string) {
+  const { steps, documents } = bubbleState.data;
+  
+  return (
+    <Accordion.Root 
+      type="multiple" 
+      defaultValue={['plan-item']}
+      className="border border-green-300 rounded-lg mb-2 bg-green-25"
+      key={key}
+    >
+      <Accordion.Item value="plan-item">
+        <Accordion.Header>
+          <Accordion.Trigger className="AccordionTrigger w-full flex items-center justify-between p-3 text-left hover:bg-green-75 transition-colors">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-1 rounded text-xs font-mono bg-green-200 text-green-900">
+                📋 Plan de Investigación
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                {steps ? steps.length : 0} pasos definidos
+              </span>
+              <span className="text-xs text-gray-500">
+                {new Date(bubbleState.timestamp).toLocaleTimeString()}
+              </span>
+            </div>
+            <ChevronDownIcon className="AccordionChevron" aria-hidden />
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className="AccordionContent">
+          <div className="p-3 pt-0">
+            <div className="bg-green-75 p-3 rounded text-sm">
+              {steps && Array.isArray(steps) && (
+                <div className="space-y-2">
+                  <strong>Pasos del plan:</strong>
+                  <ol className="list-decimal list-inside space-y-2 mt-2">
+                    {steps.map((step: string, index: number) => (
+                      <li key={index} className="text-gray-700">
+                        <MarkdownText>{step}</MarkdownText>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+              {documents && (
+                <div className="mt-2 pt-2 border-t border-green-200">
+                  <strong>Estado de documentos:</strong> {documents}
+                </div>
+              )}
+            </div>
+            
+            {/* Información de debug */}
+            {renderDebugSection(bubbleState)}
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}
+
+function renderConductResearchBubble(bubbleState: BubbleState, key: string) {
+  const { documents } = bubbleState.data;
+  
+  return (
+    <Accordion.Root 
+      type="multiple" 
+      defaultValue={['research-item']}
+      className="border border-blue-300 rounded-lg mb-2 bg-blue-25"
+      key={key}
+    >
+      <Accordion.Item value="research-item">
+        <Accordion.Header>
+          <Accordion.Trigger className="AccordionTrigger w-full flex items-center justify-between p-3 text-left hover:bg-blue-75 transition-colors">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-1 rounded text-xs font-mono bg-blue-200 text-blue-900">
+                🔍 Investigando Documentos
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                {documents && Array.isArray(documents) ? documents.length : 0} documentos encontrados
+              </span>
+              <span className="text-xs text-gray-500">
+                {new Date(bubbleState.timestamp).toLocaleTimeString()}
+              </span>
+            </div>
+            <ChevronDownIcon className="AccordionChevron" aria-hidden />
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className="AccordionContent">
+          <div className="p-3 pt-0">
+            <div className="bg-blue-75 p-3 rounded text-sm max-h-96 overflow-y-auto">
+              {documents && Array.isArray(documents) && (
+                <div className="space-y-3">
+                  <strong>Documentos encontrados:</strong>
+                  {documents.map((doc: any, index: number) => (
+                    <div key={index} className="border border-blue-200 rounded p-2 bg-white/50">
+                      <div className="space-y-1">
+                        {doc.metadata?.ius && (
+                          <div><strong>IUS:</strong> {doc.metadata.ius}</div>
+                        )}
+                        {doc.metadata?.rubro && (
+                          <div><strong>Rubro:</strong> {doc.metadata.rubro}</div>
+                        )}
+                        {doc.metadata?.localizacion && (
+                          <div><strong>Localización:</strong> {doc.metadata.localizacion}</div>
+                        )}
+                        {doc.page_content && (
+                          <div>
+                            <strong>Contenido:</strong>
+                            <div className="mt-1 p-2 bg-white/75 rounded text-xs max-h-32 overflow-y-auto">
+                              <MarkdownText>{doc.page_content.substring(0, 500)}...</MarkdownText>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            {/* Información de debug */}
+            {renderDebugSection(bubbleState)}
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}
+
+function renderRespondBubble(bubbleState: BubbleState, key: string) {
+  const { messages } = bubbleState.data;
+  
+  return (
+    <Accordion.Root 
+      type="multiple" 
+      defaultValue={['respond-item']}
+      className="border border-purple-300 rounded-lg mb-2 bg-purple-25"
+      key={key}
+    >
+      <Accordion.Item value="respond-item">
+        <Accordion.Header>
+          <Accordion.Trigger className="AccordionTrigger w-full flex items-center justify-between p-3 text-left hover:bg-purple-75 transition-colors">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-1 rounded text-xs font-mono bg-purple-200 text-purple-900">
+                ✍️ Preparando Respuesta
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                Respuesta final
+              </span>
+              <span className="text-xs text-gray-500">
+                {new Date(bubbleState.timestamp).toLocaleTimeString()}
+              </span>
+            </div>
+            <ChevronDownIcon className="AccordionChevron" aria-hidden />
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className="AccordionContent">
+          <div className="p-3 pt-0">
+            <div className="bg-purple-75 p-3 rounded text-sm">
+              {messages && Array.isArray(messages) && messages.length > 0 && (
+                <div className="space-y-2">
+                  <strong>Respuesta preparada:</strong>
+                  <div className="mt-2 p-3 bg-white/50 rounded">
+                    <MarkdownText>{messages[0].content}</MarkdownText>
+                  </div>
+                  {messages[0].response_metadata && (
+                    <div className="mt-2 pt-2 border-t border-purple-200 text-xs text-gray-600">
+                      <div>Modelo: {messages[0].response_metadata.model_name}</div>
+                      <div>Estado: {messages[0].response_metadata.finish_reason}</div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+            
+            {/* Información de debug */}
+            {renderDebugSection(bubbleState)}
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}
+
+// ===== FUNCIÓN PRINCIPAL DE RENDERIZADO =====
+function renderAllBubbles(): React.ReactElement[] {
+  const allBubbles = Array.from(permanentBubbles.values())
     .sort((a, b) => a.timestamp - b.timestamp);
   
-  console.log("🎬 RENDERIZANDO BURBUJAS ACTIVAS:");
-  console.log(`  Total burbujas: ${bubbles.length}`);
-  bubbles.forEach((bubble, index) => {
-    console.log(`  ${index + 1}. ${bubble.type} (${bubble.messageId}) - ${new Date(bubble.timestamp).toISOString().substring(11, 23)}`);
+  console.log(`🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: ${allBubbles.length}`);
+  allBubbles.forEach((bubble, index) => {
+    console.log(`  ${index + 1}. ${bubble.type} - ${bubble.title} (${new Date(bubble.timestamp).toLocaleTimeString()})`);
   });
   
-  bubbleDebug.log(`Renderizando ${bubbles.length} burbujas activas`);
-  
-  return bubbles.map((bubble, index) => {
-    const key = `bubble-${bubble.messageId}-${bubble.type}-${index}`;
-    console.log(`🎯 Renderizando burbuja: ${key}`);
+  return allBubbles.map((bubble, index) => {
+    const key = `bubble-${bubble.messageId}-${index}`;
     
     switch (bubble.type) {
       case 'logic':
-        bubbleDebug.track('RENDERING_JSON_LOGIC', 'current', { messageId: bubble.messageId, key });
-        return renderJsonLogicBubble(bubble.data, key);
+        return renderLogicBubble(bubble, key);
+      case 'legal':
+        return renderLegalBubble(bubble, key);
       case 'steps':
-        bubbleDebug.track('RENDERING_JSON_STEPS', 'current', { messageId: bubble.messageId, count: bubble.data.steps?.length || 0, key });
-        return renderJsonStepsBubble(bubble.data, key);
+        return renderStepsBubble(bubble, key);
       case 'reasoning':
-        bubbleDebug.track('RENDERING_JSON_REASONING', 'current', { messageId: bubble.messageId, key });
-        return renderJsonReasoningBubble(bubble.data, key);
+        return renderReasoningBubble(bubble, key);
+      case 'analysis':
+        return renderAnalysisBubble(bubble, key);
+      case 'sources':
+        return renderSourcesBubble(bubble, key);
+      case 'analyze_query':
+        return renderAnalyzeQueryBubble(bubble, key);
+      case 'research_plan':
+        return renderResearchPlanBubble(bubble, key);
+      case 'conduct_research':
+        return renderConductResearchBubble(bubble, key);
+      case 'respond':
+        return renderRespondBubble(bubble, key);
       default:
         console.warn(`⚠️ Tipo de burbuja desconocido: ${bubble.type}`);
         return <div key={key}>Burbuja desconocida: {bubble.type}</div>;
@@ -303,172 +995,60 @@ function renderActiveBubbles(): React.ReactElement[] {
   });
 }
 
+// ===== FUNCIÓN PRINCIPAL DE PROCESAMIENTO =====
 function renderContentWithThinkBubbles(contentString: string, messageType: string | undefined, messageId?: string) {
-  // DEBUGGING: Track content analysis
-  bubbleDebug.log('Analyzing content', { 
-    length: contentString.length, 
+  // Validación defensiva para asegurar que contentString sea una string
+  const safeContentString = typeof contentString === 'string' ? contentString : String(contentString || '');
+  
+  console.log("🔍 [DEBUG] Content analysis:", {
+    length: safeContentString.length,
     type: messageType,
-    hasThinkTags: contentString.includes('<think>'),
-    preview: contentString.substring(0, 100)
+    hasThinkTags: safeContentString.includes('<think>'),
+    preview: safeContentString.substring(0, 100)
   });
 
-  // ===== LOGGING COMPLETO DEL CONTENIDO CRUDO =====
-  console.log("🔍 RAW CONTENT START ================");
-  console.log("Longitud:", contentString.length);
-  console.log("Tipo:", messageType);
-  console.log("Contenido completo:");
-  console.log(contentString);
-  console.log("🔍 RAW CONTENT END ==================");
-
-  // ===== LÓGICA DE PERSISTENCIA DE BURBUJAS MÚLTIPLES =====
-  const msgId = messageId || 'unknown';
+  const msgId = messageId || `msg-${Date.now()}`;
   
-  // Limpiar burbujas antiguas periódicamente
-  cleanupOldBubbles();
-  
-  // ===== DESESCAPAR CONTENIDO JSON =====
-  // El contenido viene escapado desde el backend: {\"logic\":\"...\"} 
-  // Necesitamos convertirlo a: {"logic":"..."}
-  function unescapeJSONContent(content: string): string {
-    // Reemplazar \" por " pero mantener \\" como \"
-    return content.replace(/\\"/g, '"').replace(/\\\\/g, '\\');
-  }
-  
-  const unescapedContent = unescapeJSONContent(contentString);
-  
-  console.log("🔧 CONTENIDO DESESCAPADO:");
-  console.log("MessageId:", msgId);
-  console.log("Original:", contentString.substring(0, 100));
-  console.log("Desescapado:", unescapedContent.substring(0, 100));
-  
-  // Verificar si es JSON (usando contenido desescapado)
-  let isValidJSON = false;
-  let parsedContent = null;
-  try {
-    parsedContent = JSON.parse(unescapedContent.trim());
-    isValidJSON = true;
-    console.log("✅ ES JSON VÁLIDO:");
-    console.log("Campos disponibles:", Object.keys(parsedContent));
-    console.log("JSON parseado:", parsedContent);
-  } catch (e) {
-    console.log("❌ NO ES JSON VÁLIDO - Error:", e.message);
-    
-    // LOGGING DETALLADO: ¿Es JSON incompleto?
-    const isIncomplete = isIncompleteJSON(unescapedContent);
-    console.log("🔍 ¿ES JSON INCOMPLETO?", isIncomplete);
-    console.log("🔍 Contenido para análisis:", unescapedContent.substring(0, 150));
-    
-    // Verificar si parece JSON incompleto durante streaming (usando contenido desescapado)
-    if (isIncomplete) {
-      console.log("🔄 DETECTADO JSON INCOMPLETO - MOSTRANDO BURBUJAS ACTIVAS");
-      console.log(`📊 Burbujas activas disponibles: ${activeBubbles.size}`);
-      
-      // NUEVA LÓGICA PROACTIVA: Intentar crear burbuja desde JSON incompleto (usando contenido desescapado)
-      const proactiveBubble = detectAndCreateIncompleteJSONBubble(unescapedContent, msgId);
-      if (proactiveBubble) {
-        console.log(`✅ BURBUJA PROACTIVA CREADA: ${proactiveBubble.type}`);
-  } else {
-        console.log(`❌ NO SE PUDO CREAR BURBUJA PROACTIVA para ${msgId}`);
-      }
-    } else {
-      console.log("❌ NO ES JSON INCOMPLETO - No se intentará crear burbuja");
-    }
-  }
-
-  // ===== DETECTAR CONTENIDO JSON ESTRUCTURADO =====
-  if (isValidJSON && parsedContent && typeof parsedContent === 'object') {
-    console.log("🎯 PROCESANDO JSON VÁLIDO COMPLETO");
-    
-    // Detectar logic
-    if (parsedContent.logic) {
-      console.log("🟡 CREANDO BURBUJA LOGIC desde JSON completo");
-      const bubbleState: BubbleState = {
-        type: 'logic',
-        data: parsedContent,
-        timestamp: Date.now(),
-        messageId: msgId
-      };
-      activeBubbles.set(msgId, bubbleState);
-      
-      bubbleDebug.track('JSON_LOGIC_DETECTED', msgId, { 
-        type: parsedContent.type || 'general',
-        logicPreview: parsedContent.logic.substring(0, 50),
-        totalActiveBubbles: activeBubbles.size
-      });
-      return renderJsonLogicBubble(parsedContent);
-    }
-    
-    // Detectar steps
-    if (parsedContent.steps && Array.isArray(parsedContent.steps)) {
-      console.log("🟢 CREANDO BURBUJA STEPS desde JSON completo");
-      const bubbleState: BubbleState = {
-        type: 'steps',
-        data: parsedContent,
-        timestamp: Date.now(),
-        messageId: msgId
-      };
-      activeBubbles.set(msgId, bubbleState);
-      
-      bubbleDebug.track('JSON_STEPS_DETECTED', msgId, { 
-        count: parsedContent.steps.length,
-        totalActiveBubbles: activeBubbles.size
-      });
-      return renderJsonStepsBubble(parsedContent);
-    }
-    
-    // Detectar reasoning
-    if (parsedContent.reasoning) {
-      console.log("🟣 CREANDO BURBUJA REASONING desde JSON completo");
-      const bubbleState: BubbleState = {
-        type: 'reasoning',
-        data: parsedContent,
-        timestamp: Date.now(),
-        messageId: msgId
-      };
-      activeBubbles.set(msgId, bubbleState);
-      
-      bubbleDebug.track('JSON_REASONING_DETECTED', msgId, { 
-        reasoningPreview: parsedContent.reasoning.substring(0, 50),
-        totalActiveBubbles: activeBubbles.size
-      });
-      return renderJsonReasoningBubble(parsedContent);
-    }
-  }
-
-  // ===== DETECTAR CONTENIDO FINAL (TEXTO PLANO) =====
-  // Este puede ser el lugar donde se limpian las burbujas incorrectamente
-  if (!isValidJSON && !isIncompleteJSON(unescapedContent)) {
-    console.log("📝 DETECTADO CONTENIDO FINAL (TEXTO PLANO)");
-    console.log("Content preview:", unescapedContent.substring(0, 100));
-    console.log("🧹 Estado de burbujas ANTES de procesar texto final:");
-    console.log(`  Burbujas activas: ${activeBubbles.size}`);
-    Array.from(activeBubbles.entries()).forEach(([id, bubble]) => {
-      console.log(`  - ${bubble.type} (${id.substring(0, 8)}): ${new Date(bubble.timestamp).toISOString().substring(11, 23)}`);
+  // ===== 1. DETECTAR ACTUALIZACIONES LANGGRAPH =====
+  const langGraphBubble = detectLangGraphUpdate(safeContentString, msgId);
+  if (langGraphBubble) {
+    console.log(`✅ LANGGRAPH BUBBLE CREATED: ${langGraphBubble.type}`);
+    permanentBubbles.set(langGraphBubble.messageId, langGraphBubble);
+    bubbleDebug.track('LANGGRAPH_BUBBLE_ADDED', langGraphBubble.messageId, { 
+      type: langGraphBubble.type,
+      totalBubbles: permanentBubbles.size 
     });
-    
-    // CRÍTICO: ¿Aquí es donde se están limpiando las burbujas?
-    // Por ahora, NO limpiar automáticamente - dejar que el usuario vea el contenido final + burbujas
-    if (unescapedContent.trim().length > 50) { // Solo para respuestas sustanciales
-      console.log("⚠️ RESPUESTA FINAL SUSTANCIAL - EVALUANDO SI LIMPIAR BURBUJAS");
-      console.log("Longitud del contenido final:", unescapedContent.length);
-      
-      // TEMPORAL: No limpiar automáticamente, solo loggear
-      bubbleDebug.track('FINAL_RESPONSE_DETECTED', msgId, {
-        contentLength: unescapedContent.length,
-        activeBubblesBeforeCleanup: activeBubbles.size,
-        bubbleTypes: Array.from(activeBubbles.values()).map(b => b.type)
-      });
-      
-      // DECIDIR: ¿Limpiar burbujas aquí o mantenerlas?
-      // Por ahora MANTENER para debugging
-      console.log("🚫 NO LIMPIANDO BURBUJAS (modo debugging)");
-    }
   }
-
-  const parts = contentString.split(/(<think>[\s\S]*?<\/think>)/);
   
-  // DEBUGGING: Track what parts were found
+  // ===== 2. DETECTAR JSON COMPLETO =====
+  const completeBubble = detectCompleteJSON(safeContentString, msgId);
+  if (completeBubble) {
+    console.log(`✅ COMPLETE JSON BUBBLE CREATED: ${completeBubble.type}`);
+    permanentBubbles.set(completeBubble.messageId, completeBubble);
+    bubbleDebug.track('COMPLETE_JSON_BUBBLE_ADDED', completeBubble.messageId, { 
+      type: completeBubble.type,
+      totalBubbles: permanentBubbles.size 
+    });
+  }
+  
+  // ===== 3. DETECTAR JSON STREAMING =====
+  const streamingBubble = detectStreamingJSON(safeContentString, msgId);
+  if (streamingBubble) {
+    console.log(`✅ STREAMING JSON BUBBLE CREATED: ${streamingBubble.type}`);
+    permanentBubbles.set(streamingBubble.messageId, streamingBubble);
+    bubbleDebug.track('STREAMING_JSON_BUBBLE_ADDED', streamingBubble.messageId, { 
+      type: streamingBubble.type,
+      totalBubbles: permanentBubbles.size 
+    });
+  }
+  
+  // ===== 4. RENDERIZAR TODAS LAS BURBUJAS + CONTENIDO =====
+  const bubbles = renderAllBubbles();
+  
+  // ===== 5. PROCESAR THINK TAGS (contenido original) =====
+  const parts = safeContentString.split(/(<think>[\s\S]*?<\/think>)/);
   const thinkParts = parts.filter(part => part.includes('<think>'));
+  
   if (thinkParts.length > 0) {
     bubbleDebug.track('THINK_BUBBLES_DETECTED', msgId, { 
       count: thinkParts.length,
@@ -476,49 +1056,65 @@ function renderContentWithThinkBubbles(contentString: string, messageType: strin
     });
   }
 
-  if (!messageType) {
-    messageType = ''
-  }
-  const defaultSet: Set<string> = new Set()
-  return parts.map((part, index) => {
+  const defaultSet: Set<string> = new Set();
+  const renderedParts = parts.map((part, index) => {
     const isPartEffectivelyEmpty = part.trim() === "";
     if (isPartEffectivelyEmpty) {
       return null;
     }
     if (index % 2 === 1) {
-      defaultSet.add(`item-${index}`)
+      defaultSet.add(`item-${index}`);
       
-      // DEBUGGING: Track bubble render
       bubbleDebug.track('BUBBLE_RENDERING', 'current', { 
         index, 
         contentPreview: part.substring(0, 50),
         accordionValue: `item-${index}`
       });
       
-      // 这部分是 <think>标签内的内容
       return (
         <Accordion.Root type="multiple" key={index} defaultValue={[...defaultSet]} className="p-2 my-2 text-xs bg-gray-100 border border-gray-200 rounded-lg italic text-gray-400">
           <Accordion.Item value={`item-${index}`}>
-            <Accordion.Header className="flex items-center justify-between w-full">
-              <Accordion.Trigger className="AccordionTrigger text-gray-400 w-full flex items-center justify-between font-semibold text-sm cursor-pointer">
-                <div className="text-sm font-semibold not-italic">思考过程...</div>
+            <Accordion.Header>
+              <Accordion.Trigger className="AccordionTrigger w-full flex items-center justify-between p-2 text-left hover:bg-gray-200 transition-colors">
+                <span className="text-gray-600">🤔 Pensamiento interno</span>
                 <ChevronDownIcon className="AccordionChevron" aria-hidden />
               </Accordion.Trigger>
             </Accordion.Header>
             <Accordion.Content className="AccordionContent">
-              <MarkdownText>{part}</MarkdownText>
+              <div className="p-2">
+                <MarkdownText>{part.slice(7, -8)}</MarkdownText>
+              </div>
             </Accordion.Content>
           </Accordion.Item>
         </Accordion.Root>
       );
     } else {
-      if (['tool', 'tool_call'].includes(messageType) && !contentString) {
-        return null;
-      }
-      // 普通内容
-      return <MarkdownText key={index}>{part}</MarkdownText>;
+      // Contenido normal
+      return (
+        <div key={index}>
+          <MarkdownText>{part}</MarkdownText>
+        </div>
+      );
     }
-  });
+  }).filter(Boolean);
+
+  // ===== 6. RETORNAR BURBUJAS + CONTENIDO =====
+  return (
+    <div>
+      {/* BURBUJAS ACUMULATIVAS SIEMPRE VISIBLES */}
+      {bubbles.length > 0 && (
+        <div className="space-y-2 mb-4">
+          <div className="text-xs text-gray-500 font-medium">
+            💭 Burbujas de Pensamiento ({bubbles.length})
+          </div>
+          {bubbles}
+        </div>
+      )}
+      
+      {/* CONTENIDO ORIGINAL */}
+      <div>{renderedParts}</div>
+    </div>
+  );
 }
 
 function CustomComponent({
@@ -581,35 +1177,45 @@ function renderJsonLogicBubble(jsonData: any, key?: string) {
   bubbleDebug.track('RENDERING_JSON_LOGIC', 'current', { type });
   
   return (
-           <Accordion.Root 
-             type="multiple" 
+    <Accordion.Root 
+      type="multiple" 
       defaultValue={['json-logic-item']}
       className="border border-yellow-200 rounded-lg"
       key={key}
     >
       <Accordion.Item value="json-logic-item">
-              <Accordion.Header>
+        <Accordion.Header>
           <Accordion.Trigger className="AccordionTrigger w-full flex items-center justify-between p-3 text-left hover:bg-yellow-50 transition-colors">
-                  <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <span className="px-2 py-1 rounded text-xs font-mono bg-yellow-100 text-yellow-800">
                 Razonamiento
-                    </span>
-                    <span className="text-sm font-medium text-gray-700">
+              </span>
+              <span className="text-sm font-medium text-gray-700">
                 Proceso de análisis
-                    </span>
-                  </div>
-                  <ChevronDownIcon className="AccordionChevron" aria-hidden />
-                </Accordion.Trigger>
-              </Accordion.Header>
-              <Accordion.Content className="AccordionContent">
+              </span>
+            </div>
+            <ChevronDownIcon className="AccordionChevron" aria-hidden />
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className="AccordionContent">
           <div className="p-3 pt-0">
             <div className="bg-yellow-50 p-3 rounded text-sm">
               <MarkdownText>{logic}</MarkdownText>
-                    </div>
-                </div>
-              </Accordion.Content>
-            </Accordion.Item>
-          </Accordion.Root>
+            </div>
+            
+            {/* Información de debug */}
+            <div className="border-t pt-3 space-y-2 mt-3">
+              <div className="text-xs">
+                <span className="font-semibold text-gray-600">JSON Data:</span>
+                <pre className="font-mono text-gray-500 bg-gray-50 p-2 rounded mt-1 overflow-x-auto text-xs whitespace-pre-wrap">
+                  {JSON.stringify(jsonData, null, 2)}
+                </pre>
+              </div>
+            </div>
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
   );
 }
 
@@ -619,28 +1225,28 @@ function renderJsonStepsBubble(jsonData: any, key?: string) {
   bubbleDebug.track('RENDERING_JSON_STEPS', 'current', { count: steps.length });
   
   return (
-        <Accordion.Root 
-          type="multiple" 
+    <Accordion.Root 
+      type="multiple" 
       defaultValue={['json-steps-item']}
       className="border border-green-200 rounded-lg"
       key={key}
-        >
+    >
       <Accordion.Item value="json-steps-item">
-            <Accordion.Header>
+        <Accordion.Header>
           <Accordion.Trigger className="AccordionTrigger w-full flex items-center justify-between p-3 text-left hover:bg-green-50 transition-colors">
-                <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <span className="px-2 py-1 rounded text-xs font-mono bg-green-100 text-green-800">
                 Pasos ({steps.length})
-                  </span>
-                  <span className="text-sm font-medium text-gray-700">
+              </span>
+              <span className="text-sm font-medium text-gray-700">
                 Proceso paso a paso
-                  </span>
-                </div>
-                <ChevronDownIcon className="AccordionChevron" aria-hidden />
-              </Accordion.Trigger>
-            </Accordion.Header>
-            <Accordion.Content className="AccordionContent">
-              <div className="p-3 pt-0">
+              </span>
+            </div>
+            <ChevronDownIcon className="AccordionChevron" aria-hidden />
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className="AccordionContent">
+          <div className="p-3 pt-0">
             <div className="bg-green-50 p-3 rounded text-sm">
               <ol className="list-decimal list-inside space-y-1">
                 {steps.map((step: string, index: number) => (
@@ -649,11 +1255,21 @@ function renderJsonStepsBubble(jsonData: any, key?: string) {
                   </li>
                 ))}
               </ol>
-                </div>
+            </div>
+            
+            {/* Información de debug */}
+            <div className="border-t pt-3 space-y-2 mt-3">
+              <div className="text-xs">
+                <span className="font-semibold text-gray-600">JSON Data:</span>
+                <pre className="font-mono text-gray-500 bg-gray-50 p-2 rounded mt-1 overflow-x-auto text-xs whitespace-pre-wrap">
+                  {JSON.stringify(jsonData, null, 2)}
+                </pre>
               </div>
-            </Accordion.Content>
-          </Accordion.Item>
-        </Accordion.Root>
+            </div>
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
   );
 }
 
@@ -663,35 +1279,45 @@ function renderJsonReasoningBubble(jsonData: any, key?: string) {
   bubbleDebug.track('RENDERING_JSON_REASONING', 'current', { type });
   
   return (
-        <Accordion.Root 
-          type="multiple" 
+    <Accordion.Root 
+      type="multiple" 
       defaultValue={['json-reasoning-item']}
       className="border border-purple-200 rounded-lg"
       key={key}
-        >
+    >
       <Accordion.Item value="json-reasoning-item">
-            <Accordion.Header>
+        <Accordion.Header>
           <Accordion.Trigger className="AccordionTrigger w-full flex items-center justify-between p-3 text-left hover:bg-purple-50 transition-colors">
-                <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <span className="px-2 py-1 rounded text-xs font-mono bg-purple-100 text-purple-800">
                 Análisis
-                  </span>
-                  <span className="text-sm font-medium text-gray-700">
+              </span>
+              <span className="text-sm font-medium text-gray-700">
                 Razonamiento detallado
-                  </span>
-                </div>
-                <ChevronDownIcon className="AccordionChevron" aria-hidden />
-              </Accordion.Trigger>
-            </Accordion.Header>
-            <Accordion.Content className="AccordionContent">
-              <div className="p-3 pt-0">
+              </span>
+            </div>
+            <ChevronDownIcon className="AccordionChevron" aria-hidden />
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className="AccordionContent">
+          <div className="p-3 pt-0">
             <div className="bg-purple-50 p-3 rounded text-sm">
               <MarkdownText>{reasoning}</MarkdownText>
-                </div>
+            </div>
+            
+            {/* Información de debug */}
+            <div className="border-t pt-3 space-y-2 mt-3">
+              <div className="text-xs">
+                <span className="font-semibold text-gray-600">JSON Data:</span>
+                <pre className="font-mono text-gray-500 bg-gray-50 p-2 rounded mt-1 overflow-x-auto text-xs whitespace-pre-wrap">
+                  {JSON.stringify(jsonData, null, 2)}
+                </pre>
               </div>
-            </Accordion.Content>
-          </Accordion.Item>
-        </Accordion.Root>
+            </div>
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
   );
 }
 
@@ -743,7 +1369,10 @@ function renderPersistentBubble(bubbleState: BubbleState) {
             </Accordion.Header>
             <Accordion.Content className="AccordionContent">
               <div className="p-3 pt-0">
-            <MarkdownText>{data.logic || data.steps || data.reasoning}</MarkdownText>
+                <MarkdownText>{data.logic || data.steps || data.reasoning}</MarkdownText>
+                
+                {/* Información de debug */}
+                {renderDebugSection(bubbleState)}
               </div>
             </Accordion.Content>
           </Accordion.Item>
@@ -801,11 +1430,15 @@ export function AssistantMessage({
 
   // DEBUGGING: Track component renders and content changes
   const messageId = message?.id || 'no-id';
+  
+  // Validación defensiva para asegurar que contentString sea una string
+  const safeContentString = typeof contentString === 'string' ? contentString : String(contentString || '');
+  
   bubbleDebug.track('COMPONENT_RENDER', messageId, {
-    contentLength: contentString.length,
+    contentLength: safeContentString.length,
     isLoading,
-    hasThinkTags: contentString.includes('<think>'),
-    contentPreview: contentString.substring(0, 100)
+    hasThinkTags: safeContentString.includes('<think>'),
+    contentPreview: safeContentString.substring(0, 100)
   });
 
   console.log(`$$$$$$$$$ Message : ${JSON.stringify(message)}`);
@@ -855,9 +1488,9 @@ export function AssistantMessage({
           </>
         ) : (
           <>
-            {contentString.length > 0 && (
+            {safeContentString.length > 0 && (
               <div className="py-1 w-full">
-                {renderContentWithThinkBubbles(contentString, message?.type, message?.id)}
+                {renderContentWithThinkBubbles(safeContentString, message?.type, message?.id)}
               </div>
             )}
 
@@ -896,7 +1529,7 @@ export function AssistantMessage({
                     isLoading={isLoading}
                   />
                   <CommandBar
-                    content={contentString}
+                    content={safeContentString}
                     isLoading={isLoading}
                     isAiMessage={true}
                     handleRegenerate={() => handleRegenerate(parentCheckpoint)}

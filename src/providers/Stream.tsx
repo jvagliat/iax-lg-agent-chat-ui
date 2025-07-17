@@ -171,9 +171,10 @@ export const StreamProvider: React.FC<{ children: ReactNode }> = ({
         <div className="animate-in fade-in-0 zoom-in-95 bg-background flex max-w-3xl flex-col rounded-lg border shadow-lg">
           <div className="mt-14 flex flex-col gap-2 border-b p-6">
             <div className="flex flex-col items-start gap-2">
-              <LangGraphLogoSVG className="h-7" />
-              <h1 className="text-xl font-semibold tracking-tight">
-                EchOS Chat
+              <FlyoLogoSVG className="h-7" />
+              <h1 className="text-xl font-semibold tracking-tight flex items-center gap-2">
+                <img src="/iattraxia_logo.jpg" alt="IAX Logo" className="h-10 w-10 inline-block align-middle" />
+                IAX Legal Agent
               </h1>
             </div>
             <p className="text-muted-foreground">

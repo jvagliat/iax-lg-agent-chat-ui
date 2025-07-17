@@ -1,0 +1,858 @@
+VM4699:151 Console was cleared
+VM4699:31 === EMPEZANDO CAPTURA COMPLETA ===
+ƒ (...args) {
+  args.forEach(arg => {
+    if (typeof arg === 'object' && arg !== null) {
+      originalLog(JSON.stringify(arg, null, 2));
+    } else {
+      originalLog(arg);
+    }
+  });
+}
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--92c",
+  "time": "05:49:31.164",
+  "contentLength": 0,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": ""
+}
+VM4699:31 $$$$$$$$$ Message : {"lc_serializable":true,"lc_kwargs":{"lc_serializable":true,"lc_kwargs":{"content":"","additional_kwargs":{},"response_metadata":{},"name":null,"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","example":false,"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[],"tool_calls":[]},"lc_namespace":["langchain_core","messages"],"content":"","name":null,"additional_kwargs":{},"response_metadata":{},"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","tool_calls":[],"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[]},"lc_namespace":["langchain_core","messages"],"content":"","name":null,"additional_kwargs":{},"response_metadata":{},"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","tool_calls":[],"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[],"type":"ai"}
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--92c",
+  "time": "05:49:31.166",
+  "contentLength": 0,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": ""
+}
+VM4699:31 $$$$$$$$$ Message : {"lc_serializable":true,"lc_kwargs":{"lc_serializable":true,"lc_kwargs":{"content":"","additional_kwargs":{},"response_metadata":{},"name":null,"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","example":false,"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[],"tool_calls":[]},"lc_namespace":["langchain_core","messages"],"content":"","name":null,"additional_kwargs":{},"response_metadata":{},"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","tool_calls":[],"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[]},"lc_namespace":["langchain_core","messages"],"content":"","name":null,"additional_kwargs":{},"response_metadata":{},"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","tool_calls":[],"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[],"type":"ai"}
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--92c",
+  "time": "05:49:31.294",
+  "contentLength": 0,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": ""
+}
+VM4699:31 $$$$$$$$$ Message : {"lc_serializable":true,"lc_kwargs":{"lc_serializable":true,"lc_kwargs":{"content":"","additional_kwargs":{},"response_metadata":{},"name":null,"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","example":false,"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[],"tool_calls":[]},"lc_namespace":["langchain_core","messages"],"content":"","name":null,"additional_kwargs":{},"response_metadata":{},"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","tool_calls":[],"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[]},"lc_namespace":["langchain_core","messages"],"content":"","name":null,"additional_kwargs":{},"response_metadata":{},"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","tool_calls":[],"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[],"type":"ai"}
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--92c",
+  "time": "05:49:31.296",
+  "contentLength": 0,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": ""
+}
+VM4699:31 $$$$$$$$$ Message : {"lc_serializable":true,"lc_kwargs":{"lc_serializable":true,"lc_kwargs":{"content":"","additional_kwargs":{},"response_metadata":{},"name":null,"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","example":false,"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[],"tool_calls":[]},"lc_namespace":["langchain_core","messages"],"content":"","name":null,"additional_kwargs":{},"response_metadata":{},"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","tool_calls":[],"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[]},"lc_namespace":["langchain_core","messages"],"content":"","name":null,"additional_kwargs":{},"response_metadata":{},"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","tool_calls":[],"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[],"type":"ai"}
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--92c",
+  "time": "05:49:31.407",
+  "contentLength": 88,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas"
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 88,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas"
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b
+VM4699:31 Content:
+VM4699:31 {"type":"legal","logic":"El usuario pregunta por información específica sobre las etapas
+VM4699:31 ✅ LOGIC DETECTED:
+VM4699:31 El usuario pregunta por información específica sobre las etapas
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: logic
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-l",
+  "time": "05:49:31.410",
+  "type": "logic",
+  "totalBubbles": 1
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 1
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:31 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--92c",
+  "time": "05:49:31.435",
+  "contentLength": 88,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas"
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 88,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas"
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b
+VM4699:31 Content:
+VM4699:31 {"type":"legal","logic":"El usuario pregunta por información específica sobre las etapas
+VM4699:31 ✅ LOGIC DETECTED:
+VM4699:31 El usuario pregunta por información específica sobre las etapas
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: logic
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-l",
+  "time": "05:49:31.440",
+  "type": "logic",
+  "totalBubbles": 1
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 1
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:31 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--92c",
+  "time": "05:49:31.685",
+  "contentLength": 154,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 154,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b
+VM4699:31 Content:
+VM4699:31 {"type":"legal","logic":"El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema
+VM4699:31 ✅ LOGIC DETECTED:
+VM4699:31 El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: logic
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-l",
+  "time": "05:49:31.690",
+  "type": "logic",
+  "totalBubbles": 1
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 1
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:31 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--92c",
+  "time": "05:49:31.695",
+  "contentLength": 154,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 154,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b
+VM4699:31 Content:
+VM4699:31 {"type":"legal","logic":"El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema
+VM4699:31 ✅ LOGIC DETECTED:
+VM4699:31 El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: logic
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-l",
+  "time": "05:49:31.699",
+  "type": "logic",
+  "totalBubbles": 1
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 1
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:31 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--92c",
+  "time": "05:49:31.857",
+  "contentLength": 226,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema legal mexicano relacionado con procedimiento administrativo, por lo que","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 226,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b
+VM4699:31 Content:
+VM4699:31 {"type":"legal","logic":"El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema legal mexicano relacionado con procedimiento 
+VM4699:31 ✅ LOGIC DETECTED:
+VM4699:31 El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema legal mexicano relacionado con procedimiento administrativo, por lo que
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: logic
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-l",
+  "time": "05:49:31.860",
+  "type": "logic",
+  "totalBubbles": 1
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 1
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:31 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--92c",
+  "time": "05:49:31.865",
+  "contentLength": 226,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema legal mexicano relacionado con procedimiento administrativo, por lo que","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 226,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b
+VM4699:31 Content:
+VM4699:31 {"type":"legal","logic":"El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema legal mexicano relacionado con procedimiento 
+VM4699:31 ✅ LOGIC DETECTED:
+VM4699:31 El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema legal mexicano relacionado con procedimiento administrativo, por lo que
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: logic
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-l",
+  "time": "05:49:31.870",
+  "type": "logic",
+  "totalBubbles": 1
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 1
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:31 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--92c",
+  "time": "05:49:32.023",
+  "contentLength": 265,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema legal mexicano relacionado con procedimiento administrativo, por lo que se clasifica como una consulta legal.\"","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 265,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b
+VM4699:31 Content:
+VM4699:31 {"type":"legal","logic":"El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema legal mexicano relacionado con procedimiento 
+VM4699:31 ✅ LOGIC DETECTED:
+VM4699:31 El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema legal mexicano relacionado con procedimiento administrativo, por lo que se clasifica como una consulta legal.
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: logic
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-l",
+  "time": "05:49:32.027",
+  "type": "logic",
+  "totalBubbles": 1
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 1
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:32 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--92c",
+  "time": "05:49:32.032",
+  "contentLength": 265,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema legal mexicano relacionado con procedimiento administrativo, por lo que se clasifica como una consulta legal.\"","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 265,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"type\":\"legal\",\"logic\":\"El usuario pregunta por información específica sobre las etapas procesales "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--92cbe775-4b32-48c9-89ca-fb5b48cfa11b
+VM4699:31 Content:
+VM4699:31 {"type":"legal","logic":"El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema legal mexicano relacionado con procedimiento 
+VM4699:31 ✅ LOGIC DETECTED:
+VM4699:31 El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema legal mexicano relacionado con procedimiento administrativo, por lo que se clasifica como una consulta legal.
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: logic
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-l",
+  "time": "05:49:32.037",
+  "type": "logic",
+  "totalBubbles": 1
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 1
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:32 a.m.)
+VM4699:31 LangGraph backend full update:
+VM4699:31 {
+  "analyze_and_route_query": {
+    "router": {
+      "type": "legal",
+      "logic": "El usuario pregunta por información específica sobre las etapas procesales en tesis administrativas, lo que corresponde a un tema legal mexicano relacionado con procedimiento administrativo, por lo que se clasifica como una consulta legal."
+    }
+  }
+}
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--0eb",
+  "time": "05:49:33.113",
+  "contentLength": 0,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": ""
+}
+VM4699:31 $$$$$$$$$ Message : {"lc_serializable":true,"lc_kwargs":{"lc_serializable":true,"lc_kwargs":{"content":"","additional_kwargs":{},"response_metadata":{},"name":null,"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","example":false,"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[],"tool_calls":[]},"lc_namespace":["langchain_core","messages"],"content":"","name":null,"additional_kwargs":{},"response_metadata":{},"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","tool_calls":[],"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[]},"lc_namespace":["langchain_core","messages"],"content":"","name":null,"additional_kwargs":{},"response_metadata":{},"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","tool_calls":[],"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[],"type":"ai"}
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--0eb",
+  "time": "05:49:33.114",
+  "contentLength": 0,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": ""
+}
+VM4699:31 $$$$$$$$$ Message : {"lc_serializable":true,"lc_kwargs":{"lc_serializable":true,"lc_kwargs":{"content":"","additional_kwargs":{},"response_metadata":{},"name":null,"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","example":false,"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[],"tool_calls":[]},"lc_namespace":["langchain_core","messages"],"content":"","name":null,"additional_kwargs":{},"response_metadata":{},"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","tool_calls":[],"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[]},"lc_namespace":["langchain_core","messages"],"content":"","name":null,"additional_kwargs":{},"response_metadata":{},"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","tool_calls":[],"invalid_tool_calls":[],"usage_metadata":null,"tool_call_chunks":[],"type":"ai"}
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--0eb",
+  "time": "05:49:33.244",
+  "contentLength": 76,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en"
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 76,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en"
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--0ebec35d-320f-4c6a-83e2-cb38905c1c61
+VM4699:31 Content:
+VM4699:31 {"steps":["Revisar la definición y clasificación de las etapas procesales en
+VM4699:31 ✅ STEPS DETECTED:
+VM4699:31 "Revisar la definición y clasificación de las etapas procesales en
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: steps
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-s",
+  "time": "05:49:33.248",
+  "type": "steps",
+  "totalBubbles": 2
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 2
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:32 a.m.)
+VM4699:31   2. steps - 📋 Pasos de Investigación (0) (2:49:33 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--0eb",
+  "time": "05:49:33.255",
+  "contentLength": 76,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en"
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 76,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en"
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--0ebec35d-320f-4c6a-83e2-cb38905c1c61
+VM4699:31 Content:
+VM4699:31 {"steps":["Revisar la definición y clasificación de las etapas procesales en
+VM4699:31 ✅ STEPS DETECTED:
+VM4699:31 "Revisar la definición y clasificación de las etapas procesales en
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: steps
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-s",
+  "time": "05:49:33.259",
+  "type": "steps",
+  "totalBubbles": 2
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 2
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:32 a.m.)
+VM4699:31   2. steps - 📋 Pasos de Investigación (0) (2:49:33 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--0eb",
+  "time": "05:49:33.438",
+  "contentLength": 197,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.\",\"Consultar criterios y jurisprudencias","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 197,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--0ebec35d-320f-4c6a-83e2-cb38905c1c61
+VM4699:31 Content:
+VM4699:31 {"steps":["Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias
+VM4699:31 ✅ STEPS DETECTED:
+VM4699:31 "Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: steps
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-s",
+  "time": "05:49:33.442",
+  "type": "steps",
+  "totalBubbles": 2
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 2
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:32 a.m.)
+VM4699:31   2. steps - 📋 Pasos de Investigación (1) (2:49:33 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--0eb",
+  "time": "05:49:33.450",
+  "contentLength": 197,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.\",\"Consultar criterios y jurisprudencias","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 197,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--0ebec35d-320f-4c6a-83e2-cb38905c1c61
+VM4699:31 Content:
+VM4699:31 {"steps":["Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias
+VM4699:31 ✅ STEPS DETECTED:
+VM4699:31 "Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: steps
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-s",
+  "time": "05:49:33.453",
+  "type": "steps",
+  "totalBubbles": 2
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 2
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:32 a.m.)
+VM4699:31   2. steps - 📋 Pasos de Investigación (1) (2:49:33 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--0eb",
+  "time": "05:49:33.589",
+  "contentLength": 332,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.\",\"Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.\",\"Verificar en","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 332,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--0ebec35d-320f-4c6a-83e2-cb38905c1c61
+VM4699:31 Content:
+VM4699:31 {"steps":["Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias re
+VM4699:31 ✅ STEPS DETECTED:
+VM4699:31 "Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.","Verificar en
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: steps
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-s",
+  "time": "05:49:33.592",
+  "type": "steps",
+  "totalBubbles": 2
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 2
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:32 a.m.)
+VM4699:31   2. steps - 📋 Pasos de Investigación (2) (2:49:33 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--0eb",
+  "time": "05:49:33.599",
+  "contentLength": 332,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.\",\"Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.\",\"Verificar en","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 332,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--0ebec35d-320f-4c6a-83e2-cb38905c1c61
+VM4699:31 Content:
+VM4699:31 {"steps":["Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias re
+VM4699:31 ✅ STEPS DETECTED:
+VM4699:31 "Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.","Verificar en
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: steps
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-s",
+  "time": "05:49:33.602",
+  "type": "steps",
+  "totalBubbles": 2
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 2
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:32 a.m.)
+VM4699:31   2. steps - 📋 Pasos de Investigación (2) (2:49:33 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--0eb",
+  "time": "05:49:33.726",
+  "contentLength": 420,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.\",\"Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.\",\"Verificar en las fuentes oficiales del semanario judicial y documentos del sistema judicial mexicano","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 420,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--0ebec35d-320f-4c6a-83e2-cb38905c1c61
+VM4699:31 Content:
+VM4699:31 {"steps":["Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias re
+VM4699:31 ✅ STEPS DETECTED:
+VM4699:31 "Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.","Verificar en las fuentes oficiales del semanario judicial y documentos del sistema judicial mexicano
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: steps
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-s",
+  "time": "05:49:33.729",
+  "type": "steps",
+  "totalBubbles": 2
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 2
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:32 a.m.)
+VM4699:31   2. steps - 📋 Pasos de Investigación (2) (2:49:33 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--0eb",
+  "time": "05:49:33.734",
+  "contentLength": 420,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.\",\"Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.\",\"Verificar en las fuentes oficiales del semanario judicial y documentos del sistema judicial mexicano","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 420,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--0ebec35d-320f-4c6a-83e2-cb38905c1c61
+VM4699:31 Content:
+VM4699:31 {"steps":["Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias re
+VM4699:31 ✅ STEPS DETECTED:
+VM4699:31 "Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.","Verificar en las fuentes oficiales del semanario judicial y documentos del sistema judicial mexicano
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: steps
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-s",
+  "time": "05:49:33.737",
+  "type": "steps",
+  "totalBubbles": 2
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 2
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:32 a.m.)
+VM4699:31   2. steps - 📋 Pasos de Investigación (2) (2:49:33 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--0eb",
+  "time": "05:49:33.834",
+  "contentLength": 476,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.\",\"Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.\",\"Verificar en las fuentes oficiales del semanario judicial y documentos del sistema judicial mexicano los textos más actuales que describan las etapas proces","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 476,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--0ebec35d-320f-4c6a-83e2-cb38905c1c61
+VM4699:31 Content:
+VM4699:31 {"steps":["Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias re
+VM4699:31 ✅ STEPS DETECTED:
+VM4699:31 "Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.","Verificar en las fuentes oficiales del semanario judicial y documentos del sistema judicial mexicano los textos más actuales que describan las etapas proces
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: steps
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-s",
+  "time": "05:49:33.837",
+  "type": "steps",
+  "totalBubbles": 2
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 2
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:32 a.m.)
+VM4699:31   2. steps - 📋 Pasos de Investigación (2) (2:49:33 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--0eb",
+  "time": "05:49:33.842",
+  "contentLength": 476,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.\",\"Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.\",\"Verificar en las fuentes oficiales del semanario judicial y documentos del sistema judicial mexicano los textos más actuales que describan las etapas proces","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 476,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--0ebec35d-320f-4c6a-83e2-cb38905c1c61
+VM4699:31 Content:
+VM4699:31 {"steps":["Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias re
+VM4699:31 ✅ STEPS DETECTED:
+VM4699:31 "Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.","Verificar en las fuentes oficiales del semanario judicial y documentos del sistema judicial mexicano los textos más actuales que describan las etapas proces
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: steps
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-s",
+  "time": "05:49:33.846",
+  "type": "steps",
+  "totalBubbles": 2
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 2
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:32 a.m.)
+VM4699:31   2. steps - 📋 Pasos de Investigación (2) (2:49:33 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--0eb",
+  "time": "05:49:33.967",
+  "contentLength": 547,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.\",\"Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.\",\"Verificar en las fuentes oficiales del semanario judicial y documentos del sistema judicial mexicano los textos más actuales que describan las etapas procesales en tesis administrativas y confirmar cuáles son las últimas cuatro","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 547,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--0ebec35d-320f-4c6a-83e2-cb38905c1c61
+VM4699:31 Content:
+VM4699:31 {"steps":["Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias re
+VM4699:31 ✅ STEPS DETECTED:
+VM4699:31 "Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.","Verificar en las fuentes oficiales del semanario judicial y documentos del sistema judicial mexicano los textos más actuales que describan las etapas procesales en tesis administrativas y confirmar cuáles son las últimas cuatro
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: steps
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-s",
+  "time": "05:49:33.970",
+  "type": "steps",
+  "totalBubbles": 2
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 2
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:32 a.m.)
+VM4699:31   2. steps - 📋 Pasos de Investigación (2) (2:49:33 a.m.)
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] COMPONENT_RENDER
+VM4699:31 {
+  "msgId": "run--0eb",
+  "time": "05:49:33.976",
+  "contentLength": 547,
+  "isLoading": true,
+  "hasThinkTags": false,
+  "contentPreview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 $$$$$$$$$ Message : {"content":"{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.\",\"Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.\",\"Verificar en las fuentes oficiales del semanario judicial y documentos del sistema judicial mexicano los textos más actuales que describan las etapas procesales en tesis administrativas y confirmar cuáles son las últimas cuatro","additional_kwargs":{},"response_metadata":{},"tool_call_chunks":[],"id":"run--0ebec35d-320f-4c6a-83e2-cb38905c1c61","usage_metadata":{"input_tokens":0,"output_tokens":0,"total_tokens":0},"tool_calls":[],"invalid_tool_calls":[],"type":"ai"}
+VM4699:31 🔍 [DEBUG] Content analysis:
+VM4699:31 {
+  "length": 547,
+  "type": "ai",
+  "hasThinkTags": false,
+  "preview": "{\"steps\":[\"Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis "
+}
+VM4699:31 🔍 DETECTING STREAMING JSON:
+VM4699:31 MessageId:
+VM4699:31 run--0ebec35d-320f-4c6a-83e2-cb38905c1c61
+VM4699:31 Content:
+VM4699:31 {"steps":["Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias re
+VM4699:31 ✅ STEPS DETECTED:
+VM4699:31 "Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.","Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.","Verificar en las fuentes oficiales del semanario judicial y documentos del sistema judicial mexicano los textos más actuales que describan las etapas procesales en tesis administrativas y confirmar cuáles son las últimas cuatro
+VM4699:31 ✅ STREAMING JSON BUBBLE CREATED: steps
+VM4699:26 🎯 🎯 [BUBBLE-TRACK] STREAMING_JSON_BUBBLE_ADDED
+VM4699:31 {
+  "msgId": "stream-s",
+  "time": "05:49:33.980",
+  "type": "steps",
+  "totalBubbles": 2
+}
+VM4699:31 🎬 RENDERIZANDO TODAS LAS BURBUJAS ACUMULADAS: 2
+VM4699:31   1. logic - 🧠 Razonamiento (2:49:32 a.m.)
+VM4699:31   2. steps - 📋 Pasos de Investigación (2) (2:49:33 a.m.)
+VM4699:31 LangGraph backend full update:
+VM4699:31 {
+  "create_research_plan": {
+    "steps": [
+      "Revisar la definición y clasificación de las etapas procesales en el ámbito de las tesis administrativas según la legislación y doctrina mexicana.",
+      "Consultar criterios y jurisprudencias recientes relacionadas con los procedimientos administrativos para identificar la secuencia final de etapas procesales.",
+      "Verificar en las fuentes oficiales del semanario judicial y documentos del sistema judicial mexicano los textos más actuales que describan las etapas procesales en tesis administrativas y confirmar cuáles son las últimas cuatro etapas."
+    ],
+    "documents": "delete"
+  }
+}
+VM4699:31 LangGraph backend full update:
+VM4699:31 {
+  "conduct_research": {
+    "documents": [
+      {
+        "id": null,
+        "metadata": {
+          "source": "2023440.txt",
+          "id": "nFCPr5cBKOUeK9BgHf-q",
+          "ius": "2023440",
+          "rubro": "RECURSOS ADMINISTRATIVOS. LA OBLIGACIÓN PREVISTA EN EL ARTÍCULO 39 DE LA LEY FEDERAL DE PROCEDIMIENTO ADMINISTRATIVO DE MENCIONARLOS EN EL ACTO ADMINISTRATIVO, ASÍ COMO EL PLAZO PARA INTERPONERLOS Y ANTE QUÉ AUTORIDAD, EXCEPCIONALMENTE SE CUMPLE CUANDO EL EMISOR REMITA AL PRECEPTO LEGAL QUE EXPRESAMENTE LO INDIQUE, PUES CON ELLO SE SALVAGUARDA EL DERECHO DE ACCESO A LA JUSTICIA.",
+          "localizacion": " [TA]; 11a. Época; T.C.C.; Gaceta S.J.F.; Libro 4, Agosto de 2021; Tomo V; Pág. 4921",
+          "texto": "RECURSOS ADMINISTRATIVOS. LA OBLIGACIÓN PREVISTA EN EL ARTÍCULO 39 DE LA LEY FEDERAL DE PROCEDIMIENTO ADMINISTRATIVO DE MENCIONARLOS EN EL ACTO ADMINISTRATIVO, ASÍ COMO EL PLAZO PARA INTERPONERLOS Y ANTE QUÉ AUTORIDAD, EXCEPCIONALMENTE SE CUMPLE CUANDO EL EMISOR REMITA AL PRECEPTO LEGAL QUE EXPRESAMENTE LO INDIQUE, PUES CON ELLO SE SALVAGUARDA EL DERECHO DE ACCESO A LA JUSTICIA. De la interpretación sistemática de los artículos 3, fracción XV y 39 de la Ley Federal de Procedimiento Administrativo, se colige que, por regla general, los actos administrativos deben contener la mención de los recursos que contra ellos procedan, en aras de privilegiar el derecho de acceso a la justicia, contenido en el artículo 17 de la Constitución Política de los Estados Unidos Mexicanos, en relación con el artículo 25 de la Convención Americana sobre Derechos Humanos, pues la autoridad emisora tiene la obligación de indicar con precisión cuál es el medio de impugnación idóneo, quién lo conocerá y en qué plazo debe presentarse, de lo contrario, serán nulos, de conformidad con los preceptos 5 y 7 de la citada ley; sin embargo, excepcionalmente se puede cumplir esa obligación cuando la autoridad administrativa remita al precepto legal en el que expresamente se indiquen: a) el medio de defensa que procede contra su determinación; b) el plazo para interponerlo; y, c) ante qué autoridad, a fin de garantizar plenamente que el particular tendrá conocimiento de dicho medio de impugnación y, con ello, salvaguardar su derecho de acceso a la justicia.",
+          "precedentes": "Amparo 42/2021",
+          "localizacionAbr": "",
+          "textoPublicacion": "Esta tesis se publicó el viernes 13 de agosto de 2021 a las 10:21 horas en el Semanario Judicial de la Federación.",
+          "fechaPublicacion": "2021-08-13T10:21:00Z",
+          "ta_tj": "0",
+          "claveTesis": "II.3o.A.1 A (11a.)",
+          "epoca": "décima Época",
+          "fuente": "Gaceta del Semanario Judicial de la Federación",
+          "instancia": "",
+          "volumen": "",
+          "subVolumen": "",
+          "sala": "TERCER TRIBUNAL COLEGIADO EN MATERIA ADMINISTRATIVA DEL SEGUNDO CIRCUITO.",
+          "pagina": "4921.0",
+          "materias": "Administrativa",
+          "tipoTesis": "0",
+          "sInstancia": "",
+          "urlSemanario": "",
+          "ejecutorias": "",
+          "votos": "votos",
+          "idProg": "",
+          "concordancia": "",
+          "observaciones": "",
+          "idGenealogia": "0",
+          "genenalogia": "",
+          "lstTemasDetalle": "",
+          "semanal": "0",
+          "instanciaAbr": "T.C.C.",
+          "epocaAbr": "11a. Época",
+          "tipoJurisprudencia": "0",
+          "notasGenericas": "False",
+          "tomo": "V",
+          "nombreArchivo": "",
+          "ponente": "Guillermo Núñez Loyo.",
+          "secretario": "",
+          "tribunal": "TERCER TRIBUNAL COLEGIADO EN MATERIA ADMINISTRATIVA DEL SEGUNDO CIRCUITO",
+          "fecha_resolucion": "6 de mayo de 2021",
+          "libro": "4.0",
+          "tipoTesisTexto": "",
+          "url": "https://sjf2.scjn.gob.mx/detalle/tesis/2023440Pág.",
+          "uuid": "ad76f650-f09c-c4c7-04c2-3e638d8e4c48"
+        },
+        "page_content": "Tesis \n \n  Registro digital: 2023440 \n  \n  \nRECURSOS ADMINISTRATIVOS. LA OBLIGACIÓN PREVISTA EN EL ARTÍCULO 39 DE LA LEY\nFEDERAL DE PROCEDIMIENTO ADMINISTRATIVO DE MENCIONARLOS EN EL ACTO\nADMINISTRATIVO, ASÍ COMO EL PLAZO PARA INTERPONERLOS Y ANTE QUÉ AUTORIDAD,\nEXCEPCIONALMENTE SE CUMPLE CUANDO EL EMISOR REMITA AL PRECEPTO LEGAL QUE\nEXPRESAMENTE LO INDIQUE, PUES CON ELLO SE SALVAGUARDA EL DERECHO DE\nACCESO A LA JUSTICIA.\n  \n  \nDe la interpretación sistemática de los artículos 3, fracción XV y 39 de la Ley Federal de\nProcedimiento Administrativo, se colige que, por regla general, los actos administrativos deben\ncontener la mención de los recursos que contra ellos procedan, en aras de privilegiar el derecho de\nacceso a la justicia, contenido en el artículo 17 de la Constitución Política de los Estados Unidos\nMexicanos, en relación con el artículo 25 de la Convención Americana sobre Derechos Humanos,\npues la autoridad emisora tiene la obligación de indicar con precisión cuál es el medio de\nimp
+VM4699:36  Uncaught (in promise) TypeError: args[0].includes is not a function
+    at console.error (<anonymous>:36:30)
+    at Object.submit (C:\Users\pablo\git\iax-lg-agent-chat-ui\node_modules\.pnpm\@langchain+langgraph-sdk@0._de2a360accb98fa128bdfdb3400bb509\node_modules\@langchain\langgraph-sdk\dist\react\stream.js:441:25)
+console.error @ VM4699:36
+submit @ C:\Users\pablo\git\iax-lg-agent-chat-ui\node_modules\.pnpm\@langchain+langgraph-sdk@0._de2a360accb98fa128bdfdb3400bb509\node_modules\@langchain\langgraph-sdk\dist\react\stream.js:441
+await in submit
+handleSubmit @ C:\Users\pablo\git\iax-lg-agent-chat-ui\src\components\thread\index.tsx:439
+executeDispatch @ C:\Users\pablo\git\iax-lg-agent-chat-ui\node_modules\.pnpm\next@15.3.2_@playwright+tes_11ef3c70f816038b1e7819c982d20629\node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js:16501
+runWithFiberInDEV @ C:\Users\pablo\git\iax-lg-agent-chat-ui\node_modules\.pnpm\next@15.3.2_@playwright+tes_11ef3c70f816038b1e7819c982d20629\node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js:844
+processDispatchQueue @ C:\Users\pablo\git\iax-lg-agent-chat-ui\node_modules\.pnpm\next@15.3.2_@playwright+tes_11ef3c70f816038b1e7819c982d20629\node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js:16551
+eval @ C:\Users\pablo\git\iax-lg-agent-chat-ui\node_modules\.pnpm\next@15.3.2_@playwright+tes_11ef3c70f816038b1e7819c982d20629\node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js:17149
+batchedUpdates$1 @ C:\Users\pablo\git\iax-lg-agent-chat-ui\node_modules\.pnpm\next@15.3.2_@playwright+tes_11ef3c70f816038b1e7819c982d20629\node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js:3262
+dispatchEventForPluginEventSystem @ C:\Users\pablo\git\iax-lg-agent-chat-ui\node_modules\.pnpm\next@15.3.2_@playwright+tes_11ef3c70f816038b1e7819c982d20629\node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js:16705
+dispatchEvent @ C:\Users\pablo\git\iax-lg-agent-chat-ui\node_modules\.pnpm\next@15.3.2_@playwright+tes_11ef3c70f816038b1e7819c982d20629\node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js:20815
+dispatchDiscreteEvent @ C:\Users\pablo\git\iax-lg-agent-chat-ui\node_modules\.pnpm\next@15.3.2_@playwright+tes_11ef3c70f816038b1e7819c982d20629\node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js:20783
+[NEW] Explain Console errors by using Copilot in Edge: click
+         
+         to explain an error. 
+        Learn more
+        Don't show again
