@@ -11,8 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Flyo Chat",
-  description: "Flyo Chat by HavaHavai",
+  title: "EchOS Chat",
+  description: "Agent Chat UX by LangChain",
 };
 
 export default function RootLayout({
