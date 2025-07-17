@@ -1,7 +1,8 @@
 import { AIMessage, ToolMessage } from "@langchain/langgraph-sdk";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { BadgeAlert, BadgeCheck, ChevronDown, ChevronUp, Hammer, SquareChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 function isComplexValue(value: any): boolean {
   return Array.isArray(value) || (typeof value === "object" && value !== null);
@@ -15,51 +16,62 @@ export function ToolCalls({
   if (!toolCalls || toolCalls.length === 0) return null;
 
   return (
-    <div className="mx-auto grid max-w-3xl grid-rows-[1fr_auto] gap-2">
+    <div className="grid w-fit max-w-3xl grid-rows-[1fr_auto]">
       {toolCalls.map((tc, idx) => {
         const args = tc.args as Record<string, any>;
         const hasArgs = Object.keys(args).length > 0;
-        return (
-          <div
-            key={idx}
-            className="overflow-hidden rounded-lg border border-gray-200"
-          >
-            <div className="border-b border-gray-200 bg-gray-50 px-4 py-2">
-              <h3 className="font-medium text-gray-900">
-                {tc.name}
-                {tc.id && (
-                  <code className="ml-2 rounded bg-gray-100 px-2 py-1 text-sm">
-                    {tc.id}
-                  </code>
-                )}
-              </h3>
+        if (tc.id) {
+          return (
+            <div
+              key={idx}
+              className="overflow-hidden rounded-lg border border-gray-200"
+            >
+              <div className="border-b border-gray-200 bg-gray-50 pl-4 py-2 pr-4">
+                <h3 className="font-medium text-gray-900">
+                  <div className="flex items-center">
+                    <Hammer className="mr-2 h-4 w-4" />
+                    Tool Call:{" "}
+                    <code className="ml-1 rounded-sm bg-sky-100 px-2 py-1">
+                      {tc.name}
+                    </code>
+                  </div>
+                  {/* {tc.id && (
+                    <code className="ml-2 rounded bg-gray-100 px-2 py-1 text-sm">
+                      {tc.id}
+                    </code>
+                  )} */}
+                </h3>
+              </div>
+              {/* {hasArgs ? (
+                <table className="min-w-full divide-y divide-gray-200">
+                  <tbody className="divide-y divide-gray-200">
+                    {Object.entries(args).map(([key, value], argIdx) => (
+                      <tr key={argIdx}>
+                        <td className="px-4 py-2 text-sm font-medium whitespace-nowrap text-gray-900">
+                          {key}
+                        </td>
+                        <td className="px-4 py-2 text-sm text-gray-500">
+                          {isComplexValue(value) ? (
+                            <code className="rounded bg-gray-50 px-2 py-1 font-mono text-sm break-all">
+                              {JSON.stringify(value, null, 2)}
+                            </code>
+                          ) : (
+                            String(value)
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                // <code className="block p-3 text-sm">{"{}"}</code>
+                null
+              )} */}
             </div>
-            {hasArgs ? (
-              <table className="min-w-full divide-y divide-gray-200">
-                <tbody className="divide-y divide-gray-200">
-                  {Object.entries(args).map(([key, value], argIdx) => (
-                    <tr key={argIdx}>
-                      <td className="px-4 py-2 text-sm font-medium whitespace-nowrap text-gray-900">
-                        {key}
-                      </td>
-                      <td className="px-4 py-2 text-sm text-gray-500">
-                        {isComplexValue(value) ? (
-                          <code className="rounded bg-gray-50 px-2 py-1 font-mono text-sm break-all">
-                            {JSON.stringify(value, null, 2)}
-                          </code>
-                        ) : (
-                          String(value)
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <code className="block p-3 text-sm">{"{}"}</code>
-            )}
-          </div>
-        );
+          );
+        } else {
+          return null;
+        }
       })}
     </div>
   );
@@ -75,6 +87,8 @@ export function ToolResult({ message }: { message: ToolMessage }) {
     if (typeof message.content === "string") {
       parsedContent = JSON.parse(message.content);
       isJsonContent = isComplexValue(parsedContent);
+      delete parsedContent.data
+      delete parsedContent.field_definitions
     }
   } catch {
     // Content is not JSON, use as is
@@ -94,25 +108,38 @@ export function ToolResult({ message }: { message: ToolMessage }) {
       : contentStr;
 
   return (
-    <div className="mx-auto grid max-w-3xl grid-rows-[1fr_auto] gap-2">
+    <div className="grid w-fit max-w-3xl grid-rows-[1fr_auto] gap-2">
       <div className="overflow-hidden rounded-lg border border-gray-200">
         <div className="border-b border-gray-200 bg-gray-50 px-4 py-2">
-          <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="">
             {message.name ? (
               <h3 className="font-medium text-gray-900">
-                Tool Result:{" "}
-                <code className="rounded bg-gray-100 px-2 py-1">
-                  {message.name}
-                </code>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <SquareChevronRight className="mr-2 h-4 w-4" />
+                    Call
+                    <code className="mx-2 bg-sky-100 rounded-sm px-2 py-1">
+                      {message.name}
+                    </code>
+                  </div>
+                  <div className={cn('rounded-md flex justify-center p-1', 
+                    message.status === 'success' ? 'bg-green-500' : 'bg-red-500')}>
+                    { message.status === 'success' 
+                      ? <BadgeCheck className="w-5 h-5 text-white" />
+                      : <BadgeAlert className="w-5 h-5 text-white" />
+                  }
+                  </div>
+                </div>
               </h3>
             ) : (
-              <h3 className="font-medium text-gray-900">Tool Result</h3>
+              // <h3 className="font-medium text-gray-900">Tool Call Result</h3>
+              null
             )}
-            {message.tool_call_id && (
+            {/* {message.tool_call_id && (
               <code className="ml-2 rounded bg-gray-100 px-2 py-1 text-sm">
                 {message.tool_call_id}
               </code>
-            )}
+            )} */}
           </div>
         </div>
         <motion.div

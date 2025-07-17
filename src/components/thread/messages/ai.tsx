@@ -14,6 +14,48 @@ import { ThreadView } from "../agent-inbox";
 import { useQueryState, parseAsBoolean } from "nuqs";
 import { GenericInterruptView } from "./generic-interrupt";
 import { useArtifact } from "../artifact";
+import * as Accordion from "@radix-ui/react-accordion";
+import '@/styles/accordion.css'; // 可选，样式部分
+import { ChevronDownIcon } from "lucide-react";
+
+function renderContentWithThinkBubbles(contentString: string, messageType: string | undefined) {
+  if (!messageType) {
+    messageType = ''
+  }
+  const parts = contentString.split(/<think>|<\/think>/g);
+  const defaultSet: Set<string> = new Set()
+  return parts.map((part, index) => {
+    const isPartEffectivelyEmpty = part.trim() === "";
+    if (isPartEffectivelyEmpty) {
+      return null;
+    }
+    if (index % 2 === 1) {
+      defaultSet.add(`item-${index}`)
+      // 这部分是 <think>标签内的内容
+      return (
+        <Accordion.Root type="multiple" key={index} defaultValue={[...defaultSet]} className="p-2 my-2 text-xs bg-gray-100 border border-gray-200 rounded-lg italic text-gray-400">
+          <Accordion.Item value={`item-${index}`}>
+            <Accordion.Header className="flex items-center justify-between w-full">
+              <Accordion.Trigger className="AccordionTrigger text-gray-400 w-full flex items-center justify-between font-semibold text-sm cursor-pointer">
+                <div className="text-sm font-semibold not-italic">思考过程...</div>
+                <ChevronDownIcon className="AccordionChevron" aria-hidden />
+              </Accordion.Trigger>
+            </Accordion.Header>
+            <Accordion.Content className="AccordionContent">
+              <MarkdownText>{part}</MarkdownText>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion.Root>
+      );
+    } else {
+      if (['tool', 'tool_call'].includes(messageType) && !contentString) {
+        return null;
+      }
+      // 普通内容
+      return <MarkdownText key={index}>{part}</MarkdownText>;
+    }
+  });
+}
 
 function CustomComponent({
   message,
@@ -149,8 +191,8 @@ export function AssistantMessage({
   }
 
   return (
-    <div className="group mr-auto flex items-start gap-2">
-      <div className="flex flex-col gap-2">
+    <div className="group mr-auto flex items-start gap-2 w-full">
+      <div className="flex flex-col gap-2 w-full">
         {isToolResult ? (
           <>
             <ToolResult message={message} />
@@ -163,8 +205,8 @@ export function AssistantMessage({
         ) : (
           <>
             {contentString.length > 0 && (
-              <div className="py-1">
-                <MarkdownText>{contentString}</MarkdownText>
+              <div className="py-1 w-full">
+                {renderContentWithThinkBubbles(contentString, message?.type)}
               </div>
             )}
 
@@ -194,18 +236,22 @@ export function AssistantMessage({
                 "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100",
               )}
             >
-              <BranchSwitcher
-                branch={meta?.branch}
-                branchOptions={meta?.branchOptions}
-                onSelect={(branch) => thread.setBranch(branch)}
-                isLoading={isLoading}
-              />
-              <CommandBar
-                content={contentString}
-                isLoading={isLoading}
-                isAiMessage={true}
-                handleRegenerate={() => handleRegenerate(parentCheckpoint)}
-              />
+              {!hasToolCalls && 
+                <>
+                  <BranchSwitcher
+                    branch={meta?.branch}
+                    branchOptions={meta?.branchOptions}
+                    onSelect={(branch) => thread.setBranch(branch)}
+                    isLoading={isLoading}
+                  />
+                  <CommandBar
+                    content={contentString}
+                    isLoading={isLoading}
+                    isAiMessage={true}
+                    handleRegenerate={() => handleRegenerate(parentCheckpoint)}
+                  />
+                </>
+              }
             </div>
           </>
         )}
