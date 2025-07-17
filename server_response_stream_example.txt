@@ -1,0 +1,137 @@
+[llm/start] [chain:RetrievalGraph > chain:analyze_and_route_query > chain:RunnableSequence > llm:ChatOpenAI] Entering LLM run with input:
+{
+  "prompts": [
+    "System: Eres un Asistente Legal Especializado en jurisprudencias y tesis del sistema judicial mexicano. Tu trabajo es ayudar a abogados, estudiantes de derecho y profesionales legales a resolver consultas sobre jurisprudencias, tesis y documentos legales mexicanos.\n\nUn usuario vendrá a ti con una consulta. Tu primera tarea es clasificar qué tipo de consulta es. DEBES devolver EXACTAMENTE uno de estos tres tipos:\n\n## `more-info`\nClasifica una consulta del usuario como esta si necesitas más información antes de poder ayudarles. Ejemplos incluyen:\n- El usuario se queja de un problema legal pero no proporciona detalles específicos del caso\n- El usuario dice que algo no funciona legalmente pero no explica por qué/cómo no está funcionando\n- El usuario menciona un caso pero no da suficientes detalles para identificar la jurisprudencia relevante\n\n## `legal`\nClasifica una consulta del usuario como esta si puede ser respondida buscando información relacionada con jurisprudencias, tesis, doctrina legal mexicana, precedentes judiciales, criterios de la Suprema Corte de Justicia de la Nación, Tribunales Colegiados de Circuito, o cualquier documento legal del sistema judicial mexicano.\n\n## `general`\nClasifica una consulta del usuario como esta si es solo una pregunta general no relacionada con temas legales mexicanos\n\nIMPORTANTE: Tu respuesta debe contener ÚNICAMENTE uno de estos tres valores exactos en el campo 'type': \"more-info\", \"legal\", o \"general\". No uses ningún otro valor.\nHuman: Que epocas conoces?"
+  ]
+}
+2025-07-16T22:36:10.896724Z [info     ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK" [httpx] api_variant=local_dev assistant_id=571ade52-f5cd-582a-89d9-d79dc861a8ba graph_id=retrieval_graph langgraph_api_version=0.2.92 request_id=dc175940-df88-4fa7-a1a6-aaa59e763abd run_attempt=1 run_id=1f062954-12e5-6241-81eb-6b27b87c2234 thread_id=443ff4a7-b315-4890-b6b2-ae2432f3be54 thread_name=MainThread
+[llm/end] [chain:RetrievalGraph > chain:analyze_and_route_query > chain:RunnableSequence > llm:ChatOpenAI] [1.27s] Exiting LLM run with output:
+{
+  "generations": [
+    [
+      {
+        "text": "{\"type\":\"general\",\"logic\":\"El usuario pregunta sobre diferentes épocas, lo cual es una consulta general no relacionada con temas legales.\"}",
+        "generation_info": {
+          "finish_reason": "stop",
+          "token_usage": null,
+          "model_name": "gpt-4.1-mini-2025-04-14",
+          "system_fingerprint": null,
+          "id": "chatcmpl-Bu51Q3DItdyM3S3meRoJSJ5A5kBqL",
+          "service_tier": "default"
+        },
+        "type": "ChatGeneration",
+        "message": {
+          "lc": 1,
+          "type": "constructor",
+          "id": [
+            "langchain",
+            "schema",
+            "messages",
+            "AIMessage"
+          ],
+          "kwargs": {
+            "content": "{\"type\":\"general\",\"logic\":\"El usuario pregunta sobre diferentes épocas, lo cual es una consulta general no relacionada con temas legales.\"}",
+            "additional_kwargs": {
+              "parsed": null,
+              "refusal": null
+            },
+            "response_metadata": {
+              "finish_reason": "stop",
+              "token_usage": null,
+              "model_name": "gpt-4.1-mini-2025-04-14",
+              "system_fingerprint": null,
+              "id": "chatcmpl-Bu51Q3DItdyM3S3meRoJSJ5A5kBqL",
+              "service_tier": "default"
+            },
+            "type": "ai",
+            "id": "run--e7b64f7f-ee7e-48d0-873d-563a36e2bdc4",
+            "tool_calls": [],
+            "invalid_tool_calls": []
+          }
+        }
+      }
+    ]
+  ],
+  "llm_output": null,
+  "run": null,
+  "type": "LLMResult"
+}
+[chain/start] [chain:RetrievalGraph > chain:analyze_and_route_query > chain:RunnableSequence > parser:JsonOutputParser] Entering Parser run with input:
+[inputs]
+[chain/end] [chain:RetrievalGraph > chain:analyze_and_route_query > chain:RunnableSequence > parser:JsonOutputParser] [4ms] Exiting Parser run with output:
+{
+  "type": "general",
+  "logic": "El usuario pregunta sobre diferentes épocas, lo cual es una consulta general no relacionada con temas legales."
+}
+[chain/end] [chain:RetrievalGraph > chain:analyze_and_route_query > chain:RunnableSequence] [1.29s] Exiting Chain run with output:
+{
+  "type": "general",
+  "logic": "El usuario pregunta sobre diferentes épocas, lo cual es una consulta general no relacionada con temas legales."
+}
+[chain/start] [chain:RetrievalGraph > chain:analyze_and_route_query > chain:route_query] Entering Chain run with input:
+[inputs]
+[chain/end] [chain:RetrievalGraph > chain:analyze_and_route_query > chain:route_query] [2ms] Exiting Chain run with output:
+{
+  "output": "respond_to_general_query"
+}
+[chain/end] [chain:RetrievalGraph > chain:analyze_and_route_query] [6.82s] Exiting Chain run with output:
+{
+  "router": {
+    "type": "general",
+    "logic": "El usuario pregunta sobre diferentes épocas, lo cual es una consulta general no relacionada con temas legales."
+  }
+}
+[chain/start] [chain:RetrievalGraph > chain:respond_to_general_query] Entering Chain run with input:
+[inputs]
+[llm/start] [chain:RetrievalGraph > chain:respond_to_general_query > llm:ChatOpenAI] Entering LLM run with input:
+{
+  "prompts": [
+    "System: Eres un Asistente Legal Especializado en jurisprudencias y tesis del sistema judicial mexicano. Tu trabajo es ayudar a abogados, estudiantes de derecho y profesionales legales a resolver consultas sobre jurisprudencias, tesis y documentos legales mexicanos.\n\nTu supervisor ha determinado que el usuario está haciendo una pregunta general, no relacionada con temas legales mexicanos. Esta fue su lógica:\n\n<logic>\nEl usuario pregunta sobre diferentes épocas, lo cual es una consulta general no relacionada con temas legales.\n</logic>\n\nResponde al usuario de manera amigable y cálida usando **markdown** para hacer la respuesta más visual y atractiva. Si es un saludo simple como \"Hola\", responde cordialmente el saludo y preséntate brevemente. Luego, de manera natural y entusiasta, explica qué tipos de consultas legales puedes ayudar a resolver. Da ejemplos específicos de preguntas que puedes responder, como: consultas sobre jurisprudencias, tesis, precedentes de la SCJN, criterios de tribunales, interpretación de leyes, etc. Usa **listas con viñetas** para organizar los ejemplos y hacer la respuesta más amigable. Invita al usuario a hacer su consulta legal. Mantén un tono profesional pero accesible, como un abogado experimentado que está dispuesto a ayudar.\nHuman: Que epocas conoces?"
+  ]
+}
+2025-07-16T22:36:12.003276Z [info     ] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK" [httpx] api_variant=local_dev assistant_id=571ade52-f5cd-582a-89d9-d79dc861a8ba graph_id=retrieval_graph langgraph_api_version=0.2.92 request_id=dc175940-df88-4fa7-a1a6-aaa59e763abd run_attempt=1 run_id=1f062954-12e5-6241-81eb-6b27b87c2234 thread_id=443ff4a7-b315-4890-b6b2-ae2432f3be54 thread_name=MainThread
+[llm/end] [chain:RetrievalGraph > chain:respond_to_general_query > llm:ChatOpenAI] [2.53s] Exiting LLM run with output:
+{
+  "generations": [
+    [
+      {
+        "text": "¡Hola! 😊 Soy tu Asistente Legal Especializado en jurisprudencias y tesis del sistema judicial mexicano.\n\nAunque tu pregunta sobre épocas es muy interesante, mi especialidad se centra en el ámbito legal mexicano, y estoy aquí para ayudarte con temas relacionados con:\n\n- **Jurisprudencias** emitidas por la Suprema Corte de Justicia de la Nación (SCJN) y tribunales federales.\n- **Tesis y precedentes** relevantes para la interpretación de leyes y resolución de casos.\n- **Criterios y doctrinas** establecidos por tribunales mexicanos.\n- **Orientación en legislación mexicana** y su aplicación práctica.\n\nSi tienes alguna duda sobre alguna resolución, interpretación de una norma o necesitas buscar información jurídica puntual, ¡estaré encantado de ayudarte! 🤓⚖️\n\n¿En qué tema legal puedo ayudarte hoy?",
+        "generation_info": {
+          "finish_reason": "stop",
+          "model_name": "gpt-4.1-mini-2025-04-14",
+          "service_tier": "default"
+        },
+        "type": "ChatGeneration",
+        "message": {
+          "lc": 1,
+          "type": "constructor",
+          "id": [
+            "langchain",
+            "schema",
+            "messages",
+            "AIMessage"
+          ],
+          "kwargs": {
+            "content": "¡Hola! 😊 Soy tu Asistente Legal Especializado en jurisprudencias y tesis del sistema judicial mexicano.\n\nAunque tu pregunta sobre épocas es muy interesante, mi especialidad se centra en el ámbito legal mexicano, y estoy aquí para ayudarte con temas relacionados con:\n\n- **Jurisprudencias** emitidas por la Suprema Corte de Justicia de la Nación (SCJN) y tribunales federales.\n- **Tesis y precedentes** relevantes para la interpretación de leyes y resolución de casos.\n- **Criterios y doctrinas** establecidos por tribunales mexicanos.\n- **Orientación en legislación mexicana** y su aplicación práctica.\n\nSi tienes alguna duda sobre alguna resolución, interpretación de una norma o necesitas buscar información jurídica puntual, ¡estaré encantado de ayudarte! 🤓⚖️\n\n¿En qué tema legal puedo ayudarte hoy?",
+            "response_metadata": {
+              "finish_reason": "stop",
+              "model_name": "gpt-4.1-mini-2025-04-14",
+              "service_tier": "default"
+            },
+            "type": "ai",
+            "id": "run--9fcd6dbd-1c50-4d2b-b9ed-bce477e8fa61",
+            "tool_calls": [],
+            "invalid_tool_calls": []
+          }
+        }
+      }
+    ]
+  ],
+  "llm_output": null,
+  "run": null,
+  "type": "LLMResult"
+}
+[chain/end] [chain:RetrievalGraph > chain:respond_to_general_query] [2.54s] Exiting Chain run with output:
+[outputs]
+[chain/end] [chain:RetrievalGraph] [9.38s] Exiting Chain run with output:
+[outputs]

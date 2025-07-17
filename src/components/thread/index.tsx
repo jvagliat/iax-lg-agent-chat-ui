@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { Checkpoint, Message } from "@langchain/langgraph-sdk";
 import { AssistantMessage, AssistantMessageLoading } from "./messages/ai";
 import { HumanMessage } from "./messages/human";
+import { GenericInterruptView } from "./messages/generic-interrupt";
 import {
   DO_NOT_RENDER_ID_PREFIX,
   ensureToolCallsHaveResponses,
@@ -628,27 +629,21 @@ export function Thread() {
                     .filter(isDisplayableMessage)
                     .map((message, index) =>
                       message.type === "human"
-                        ? (console.log(
-                            `$$$$$$$$$ 0 Assist : ${JSON.stringify(messages)}`,
-                          ),
-                          (
+                        ? (
                             <HumanMessage
                               key={message.id || `${message.type}-${index}`}
                               message={message}
                               isLoading={isLoading}
                             />
-                          ))
-                        : (console.log(
-                            `$$$$$$$$$ 1 Assist : ${JSON.stringify(messages)}`,
-                          ),
-                          (
+                          )
+                        : (
                             <AssistantMessage
                               key={message.id || `${message.type}-${index}`}
                               message={message}
                               isLoading={isLoading}
                               handleRegenerate={handleRegenerate}
                             />
-                          )),
+                          ),
                     )}
                   {/* Special rendering case where there are no AI/tool messages, but there is an interrupt. */}
                   {hasNoAIOrToolMessages && !!stream.interrupt && (
